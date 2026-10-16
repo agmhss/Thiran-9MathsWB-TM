@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>திறன் (THIRAN) வகுப்பு 9 - கணிதம் (தமிழ் வழி) பயிற்சி நூல்</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent-grade: #059669;
+      --accent-grade-light: #ecfdf5;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --warning: #ca8a04;
+      --warning-bg: #fef9c3;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', 'Nirmala UI', 'Latha', system-ui, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* தலைப்பு மற்றும் மேல் பகுதி */
+    .top-header {
+      position: sticky; top: 0; z-index: 100; background: var(--card);
+      border-bottom: 2px solid #e2e8f0; padding: 10px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04); gap: 15px; flex-wrap: wrap;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .gov-badge {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; font-weight: 800;
+      padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; letter-spacing: 0.5px;
+    }
+    .student-badge { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+    .student-badge strong { color: var(--text); }
+    .btn-switch-user {
+      background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;
+      padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-switch-user:hover { background: #fecaca; }
+
+    /* முன்னேற்றப் பட்டை (Progress Widget) */
+    .progress-widget {
+      display: flex; align-items: center; gap: 18px;
+      background: #f1f5f9; padding: 8px 16px; border-radius: 12px;
+      border: 1px solid #cbd5e1;
+    }
+    .stat-item { font-size: 0.83rem; color: var(--muted); font-weight: 600; }
+    .stat-item strong { color: var(--primary-dark); font-size: 0.92rem; }
+    .progress-container { width: 170px; }
+    .progress-label {
+      display: flex; justify-content: space-between; font-size: 0.76rem;
+      font-weight: 700; margin-bottom: 4px; color: var(--text);
+    }
+    .progress-track {
+      width: 100%; height: 10px; background: #cbd5e1;
+      border-radius: 999px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #2563eb, #16a34a);
+      transition: width 0.4s ease;
+    }
+
+    /* வரவேற்பு / உள்நுழைவுத் திரை */
+    #welcome-screen {
+      position: fixed; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
+      overflow-y: auto;
+    }
+    .welcome-card {
+      background: var(--card); max-width: 580px; width: 100%; border-radius: 16px;
+      padding: 28px 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.45); margin: auto;
+    }
+    .welcome-card h1 { margin: 0 0 6px; color: var(--primary); font-size: 1.5rem; }
+    .welcome-card p.sub { margin: 0 0 18px; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+
+    /* தாவல்கள் (Tabs) */
+    .auth-tabs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      background: #f1f5f9; padding: 5px; border-radius: 10px; margin-bottom: 18px;
+    }
+    .tab-btn {
+      padding: 10px; border: none; border-radius: 7px; font-weight: 700;
+      font-size: 0.88rem; cursor: pointer; background: transparent; color: var(--muted);
+      transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--card); color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 10px; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label { display: block; font-size: 0.83rem; font-weight: 700; margin-bottom: 5px; color: #334155; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px 12px; border: 2px solid #cbd5e1; border-radius: 8px;
+      font-size: 0.94rem; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+    .btn-primary {
+      width: 100%; background: var(--primary); color: white; border: none;
+      padding: 12px; border-radius: 8px; font-size: 0.96rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s; margin-top: 6px;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .error-msg {
+      background: var(--danger-bg); color: var(--danger); padding: 10px 12px;
+      border-radius: 8px; font-size: 0.85rem; font-weight: 700; margin-bottom: 12px; display: none;
+    }
+
+    /* சேமிக்கப்பட்ட கணக்குகள் */
+    .saved-profiles-box {
+      margin-top: 18px; border-top: 1px solid #e2e8f0; padding-top: 14px;
+    }
+    .saved-profiles-title {
+      font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px; letter-spacing: 0.5px;
+    }
+    .profile-pill {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #f8fafc; border: 1px solid #cbd5e1; padding: 9px 12px;
+      border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+    }
+    .profile-pill:hover { border-color: var(--primary); background: var(--primary-light); }
+    .profile-pill-info { font-size: 0.86rem; }
+    .profile-pill-info strong { color: var(--text); }
+    .profile-pill-meta { font-size: 0.78rem; color: var(--primary); font-weight: 700; }
+
+    /* பணியிடம் (Workspace Layout) */
+    .workspace { display: flex; flex: 1; }
+    .sidebar {
+      width: 320px; background: var(--card); border-right: 1px solid #e2e8f0;
+      padding: 14px; overflow-y: auto; max-height: calc(100vh - 64px);
+      position: sticky; top: 64px;
+    }
+    .sidebar-section-title {
+      font-size: 0.74rem; letter-spacing: 0.5px;
+      color: white; background: var(--primary); padding: 6px 10px; border-radius: 6px;
+      font-weight: 800; margin: 8px 0 6px 0;
+    }
+    .sidebar-section-title.grade-lvl {
+      background: var(--accent-grade); margin-top: 14px;
+    }
+    .nav-btn {
+      width: 100%; padding: 8px 10px; border: none; background: transparent;
+      text-align: left; border-radius: 7px; cursor: pointer; font-size: 0.84rem;
+      font-weight: 600; color: #475569; display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-btn:hover { background: #f1f5f9; }
+    .nav-btn.active { background: var(--primary-light); color: var(--primary-dark); font-weight: 800; }
+    .nav-btn.cert-btn {
+      background: linear-gradient(135deg, #0f2557, #1e3a8a); color: #fde047;
+      border: 1px solid #eab308; margin-top: 12px; padding: 11px 12px; font-weight: 800; font-size: 0.86rem;
+    }
+    .nav-btn.cert-btn:hover { opacity: 0.95; }
+    .nav-btn.cert-btn.active { background: linear-gradient(135deg, #071330, #172554); color: #facc15; box-shadow: 0 0 0 2px #eab308; }
+    .star { color: #cbd5e1; font-size: 1rem; }
+    .star.earned { color: #facc15; text-shadow: 0 0 2px rgba(0,0,0,0.4); }
+
+    /* முதன்மைப் பகுதி (Main Content Area) */
+    .main { flex: 1; padding: 28px 36px; max-width: 980px; margin: 0 auto; }
+    .module-card {
+      background: var(--card); padding: 28px; border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06); display: none;
+    }
+    .module-card.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .mod-header-row {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
+    }
+    .mod-header-row h2 { margin: 0; color: var(--primary); border: none; padding: 0; font-size: 1.35rem; }
+    .set-badge {
+      background: var(--primary-light); color: var(--primary-dark); font-size: 0.76rem;
+      font-weight: 700; padding: 5px 10px; border-radius: 99px;
+    }
+    .grade-tag {
+      background: var(--accent-grade-light); color: #047857; font-size: 0.74rem;
+      font-weight: 800; padding: 4px 9px; border-radius: 6px;
+    }
+
+    .question-block {
+      background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px;
+      border-radius: 8px; margin-bottom: 18px;
+    }
+    .question-title { font-weight: 700; margin-bottom: 8px; display: block; color: #1e293b; line-height: 1.5; }
+    .passage {
+      background: #eff6ff; border-left: 4px solid var(--primary);
+      padding: 14px; margin-bottom: 16px; line-height: 1.7; border-radius: 0 8px 8px 0; font-size: 0.93rem;
+    }
+    .q-input {
+      padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px;
+      font-size: 0.94rem; min-width: 240px; max-width: 100%; margin: 3px 0;
+    }
+    .q-input:focus { outline: none; border-color: var(--primary); }
+    .correct-input { border-color: var(--success) !important; background-color: var(--success-bg) !important; }
+    .wrong-input { border-color: var(--danger) !important; background-color: var(--danger-bg) !important; }
+
+    .btn-check {
+      background: var(--primary); color: white; border: none; padding: 11px 22px;
+      border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    }
+    .btn-check:hover { background: var(--primary-dark); }
+    .btn-gold-download {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #09152b; border: 2px solid #fde047; padding: 11px 20px;
+      border-radius: 8px; font-size: 0.92rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-gold-download:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(217, 119, 6, 0.45); }
+    .btn-secondary {
+      background: #e2e8f0; color: #1e293b; border: none; padding: 10px 16px;
+      border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; margin-left: 8px;
+    }
+    .btn-shuffle {
+      background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-left: 8px;
+    }
+    .btn-shuffle:hover { background: #e2e8f0; color: var(--text); }
+    .feedback { margin-top: 15px; font-weight: 700; padding: 12px; border-radius: 8px; display: none; line-height: 1.5; }
+
+    /* ============================================================
+       சான்றிதழ் வடிவமைப்பு (Certificate Frame)
+       ============================================================ */
+    .certificate-frame {
+      background: radial-gradient(circle at center, #1e3a8a 0%, #0f2557 55%, #071330 100%);
+      border: 6px solid #d4af37;
+      outline: 2px solid #fef08a;
+      outline-offset: -12px;
+      padding: 26px 26px 20px;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      margin-bottom: 16px;
+      box-shadow: 0 14px 32px rgba(7, 19, 48, 0.4), inset 0 0 50px rgba(250, 204, 21, 0.1);
+      color: #fef08a;
+      overflow: hidden;
+    }
+    .certificate-frame::before, .certificate-frame::after {
+      content: "✦"; position: absolute; top: 14px; font-size: 1.35rem; color: #facc15;
+    }
+    .certificate-frame::before { left: 20px; }
+    .certificate-frame::after { right: 20px; }
+
+    .cert-emblem {
+      width: 50px; height: 50px; margin: 0 auto 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef08a 0%, #eab308 60%, #a16207 100%);
+      border: 2.5px solid #fffbeb;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: #071330;
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.5);
+    }
+    .cert-header {
+      font-size: 0.84rem; font-weight: 800; letter-spacing: 1px;
+      color: #fde047;
+    }
+    .cert-title {
+      font-size: 1.75rem; font-weight: 900; margin: 6px 0 6px;
+      color: #fde047;
+      background: linear-gradient(180deg, #fffbeb 0%, #fde047 45%, #eab308 85%, #ca8a04 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 0.8px;
+    }
+    .cert-subtitle {
+      margin: 2px 0 5px; color: #fde68a; font-size: 0.88rem;
+    }
+    .cert-student-name {
+      font-size: 1.75rem; font-weight: 900;
+      color: #fef08a;
+      background: linear-gradient(180deg, #ffffff 0%, #fef08a 50%, #f59e0b 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      border-bottom: 2px solid #eab308;
+      display: inline-block; padding: 0 26px 4px; margin: 3px 0 8px;
+    }
+    .cert-details {
+      font-size: 0.92rem; line-height: 1.5; color: #fef9c3;
+      max-width: 680px; margin: 3px auto 10px;
+    }
+    .cert-details strong { color: #facc15; }
+
+    .congrats-banner {
+      background: rgba(250, 204, 21, 0.14); color: #fef08a;
+      border: 1.5px solid #eab308; padding: 9px 14px; border-radius: 8px;
+      font-weight: 700; margin: 8px auto; max-width: 720px;
+      line-height: 1.5; font-size: 0.86rem;
+    }
+
+    .cert-stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      margin: 12px auto; max-width: 660px;
+    }
+    .cert-stat-card {
+      background: rgba(7, 19, 48, 0.7); border: 1.5px solid #eab308;
+      padding: 8px 10px; border-radius: 8px;
+    }
+    .cert-stat-card span {
+      display: block; font-size: 0.68rem; color: #fde68a;
+      font-weight: 700; margin-bottom: 2px;
+    }
+    .cert-stat-card strong { font-size: 1.2rem; color: #facc15; }
+    .cert-dates-line { font-size: 0.76rem; color: #fde68a; margin: 8px 0 0; opacity: 0.92; }
+    .cert-designer-credit {
+      margin-top: 10px; padding-top: 7px;
+      border-top: 1px solid rgba(234, 179, 8, 0.45);
+      font-size: 0.82rem; font-weight: 800; letter-spacing: 1.2px;
+      text-transform: uppercase; color: #facc15;
+    }
+
+    /* பணிப் பதிவேடு அட்டவணை (Work Log Tables) */
+    .log-section-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin: 6px 0 6px; flex-wrap: wrap; gap: 6px;
+    }
+    .log-section-header h3 { margin: 0; font-size: 0.98rem; color: #0f2557; }
+    .log-section-header p { margin: 0; color: var(--muted); font-size: 0.78rem; }
+
+    .log-grid-two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .log-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
+    .log-table th, .log-table td { border: 1px solid #cbd5e1; padding: 4.5px 6px; }
+    .log-table th { background: #0f2557; color: #fde047; font-weight: 700; font-size: 0.7rem; }
+    .log-table tr:nth-child(even) { background: #f8fafc; }
+    .badge-done { background: var(--success-bg); color: var(--success); padding: 1.5px 6px; border-radius: 99px; font-weight: 700; font-size: 0.68rem; display: inline-block; }
+    .badge-pending { background: #f1f5f9; color: var(--muted); padding: 1.5px 6px; border-radius: 99px; font-weight: 600; font-size: 0.68rem; display: inline-block; }
+
+    /* அடிக்குறிப்பு (Footer) */
+    .app-footer {
+      background: #0f172a; color: #fde047; text-align: center;
+      padding: 12px 20px; font-size: 0.86rem; font-weight: 700;
+      letter-spacing: 0.6px; border-top: 2px solid #eab308; margin-top: auto;
+    }
+
+    /* அச்சுப் பொறி மற்றும் A4 பக்க வடிவமைப்பு (Print Styles) */
+    @page {
+      size: A4 portrait;
+      margin: 5mm 7mm;
+    }
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body {
+        width: 100%; height: auto; margin: 0 !important; padding: 0 !important; background: #ffffff !important;
+      }
+      .top-header, .sidebar, .no-print, .app-footer, #welcome-screen, #modules-container {
+        display: none !important;
+      }
+      .workspace, .main {
+        display: block !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important;
+      }
+      #cert-view {
+        display: block !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; border: none !important;
+        page-break-inside: avoid !important; break-inside: avoid !important;
+      }
+      .certificate-frame {
+        padding: 10px 16px 8px !important; margin-bottom: 6px !important;
+        border-width: 4px !important; outline-width: 1.5px !important; outline-offset: -7px !important;
+        border-radius: 8px !important; box-shadow: none !important;
+      }
+      .cert-emblem { width: 30px !important; height: 30px !important; font-size: 0.95rem !important; margin: 0 auto 3px !important; }
+      .cert-header { font-size: 0.64rem !important; }
+      .cert-title {
+        font-size: 1.2rem !important; margin: 2px 0 3px !important;
+        background: none !important; -webkit-text-fill-color: #fde047 !important; color: #fde047 !important; filter: none !important;
+      }
+      .cert-subtitle { font-size: 0.68rem !important; margin: 1px 0 2px !important; }
+      .cert-student-name {
+        font-size: 1.2rem !important; padding: 0 16px 2px !important; margin: 1px 0 4px !important;
+        background: none !important; -webkit-text-fill-color: #ffffff !important; color: #ffffff !important; filter: none !important;
+      }
+      .cert-details { font-size: 0.72rem !important; line-height: 1.3 !important; margin: 2px auto 4px !important; }
+      .congrats-banner { padding: 5px 10px !important; margin: 4px auto !important; font-size: 0.68rem !important; line-height: 1.25 !important; }
+      .cert-stats-grid { gap: 8px !important; margin: 5px auto !important; max-width: 540px !important; }
+      .cert-stat-card { padding: 4px 6px !important; border-radius: 5px !important; }
+      .cert-stat-card span { font-size: 0.55rem !important; }
+      .cert-stat-card strong { font-size: 0.92rem !important; }
+      .cert-dates-line { font-size: 0.62rem !important; margin-top: 4px !important; }
+      .cert-designer-credit { margin-top: 5px !important; padding-top: 3px !important; font-size: 0.64rem !important; }
+
+      .log-section-header { margin: 3px 0 3px !important; }
+      .log-section-header h3 { font-size: 0.76rem !important; }
+      .log-section-header p { font-size: 0.6rem !important; }
+      .log-grid-two-col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+      .log-table { font-size: 0.6rem !important; }
+      .log-table th, .log-table td { padding: 2.8px 4px !important; line-height: 1.1 !important; }
+      .log-table th { font-size: 0.58rem !important; }
+      .badge-done, .badge-pending { font-size: 0.55rem !important; padding: 1px 4px !important; }
+    }
+
+    @media (max-width: 850px) {
+      .workspace { flex-direction: column; }
+      .sidebar { width: 100%; max-height: none; position: static; }
+      .main { padding: 18px; }
+      .log-grid-two-col { grid-template-columns: 1fr; }
+      .cert-stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- வரவேற்பு மற்றும் மாணவர் பதிவுத் திரை (Welcome / Login Modal) -->
+  <div id="welcome-screen">
+    <div class="welcome-card">
+      <h1>திறன் (THIRAN) வகுப்பு 9 - கணிதம் (தமிழ் வழி)</h1>
+      <p class="sub"><strong>பகுதி 1: அடிப்படைக் கருத்துகள் (1–15)</strong> மற்றும் <strong>பகுதி 2: வகுப்புநிலைப் பாடப்பொருள் (16–25)</strong> கொண்ட முழுமையான இணையவழிப் பயிற்சித் தளம். விட்ட இடத்திலிருந்து தொடர உங்கள் <strong>வரிசை எண் (Roll No) &amp; பள்ளியின் பெயரை</strong> உள்ளிடவும்!</p>
+
+      <div class="auth-tabs">
+        <button type="button" class="tab-btn active" id="tab-login-btn" onclick="switchAuthTab('login')">🔄 விட்ட இடத்திலிருந்து தொடர (Resume)</button>
+        <button type="button" class="tab-btn" id="tab-reg-btn" onclick="switchAuthTab('register')">✨ புதிய மாணவர் பதிவு (New Student)</button>
+      </div>
+
+      <div id="auth-error" class="error-msg"></div>
+
+      <!-- ஏற்கனவே பதிவு செய்த மாணவர் உள்நுழைவு -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="login-roll">வரிசை எண் (Roll Number) *</label>
+            <input type="text" id="login-roll" required placeholder="எ.கா: 901">
+          </div>
+          <div class="form-group">
+            <label for="login-school">பள்ளியின் பெயர் (School Name) *</label>
+            <input type="text" id="login-school" required placeholder="எ.கா: அரசு மேல்நிலைப்பள்ளி">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">எனது பயிற்சியைத் தொடரவும் &rarr;</button>
+
+        <div class="saved-profiles-box" id="saved-profiles-container" style="display:none;">
+          <div class="saved-profiles-title">📂 அல்லது இந்தக் கருவியில் சேமிக்கப்பட்டுள்ள உங்கள் பெயரைத் தேர்ந்தெடுக்கவும்:</div>
+          <div id="saved-profiles-list"></div>
+        </div>
+      </form>
+
+      <!-- புதிய மாணவர் பதிவுப் படிவம் -->
+      <form id="register-form" style="display:none;" onsubmit="handleRegister(event)">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="reg-name">மாணவர் பெயர் (Student Full Name) *</label>
+            <input type="text" id="reg-name" required placeholder="எ.கா: அருண்குமார். க">
+          </div>
+          <div class="form-group">
+            <label for="reg-class">வகுப்பு (Class) *</label>
+            <select id="reg-class" required>
+              <option value="வகுப்பு 9" selected>வகுப்பு 9 (Class 9)</option>
+              <option value="வகுப்பு 8">வகுப்பு 8 (Class 8)</option>
+              <option value="வகுப்பு 7">வகுப்பு 7 (Class 7)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reg-sec">பிரிவு (Section) *</label>
+            <input type="text" id="reg-sec" required placeholder="எ.கா: அ / A">
+          </div>
+          <div class="form-group">
+            <label for="reg-roll">வரிசை எண் (Roll Number) *</label>
+            <input type="text" id="reg-roll" required placeholder="எ.கா: 901">
+          </div>
+          <div class="form-group">
+            <label for="reg-school">பள்ளியின் பெயர் (School Name) *</label>
+            <input type="text" id="reg-school" required placeholder="எ.கா: அரசு மேல்நிலைப்பள்ளி">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">பதிவு செய்து பயிற்சியைத் தொடங்குக &rarr;</button>
+      </form>
+      <div style="text-align:center; margin-top:16px; font-size:0.8rem; color:#64748b; font-weight:700;">
+        Designed by Thiraviya Kumar G
+      </div>
+    </div>
+  </div>
+
+  <!-- மேல் தலைப்பு மற்றும் முன்னேற்றப் பட்டை -->
+  <header class="top-header">
+    <div class="header-left">
+      <div class="gov-badge">திறன் (THIRAN) கணிதம் - வகுப்பு 9 (தமிழ் வழி)</div>
+      <div class="student-badge" id="header-student-info">உள்நுழையவில்லை</div>
+      <button class="btn-switch-user" onclick="logoutCurrentStudent()">🔄 மாணவர் மாற்றம் (Switch Student)</button>
+    </div>
+
+    <div class="progress-widget">
+      <div class="stat-item">⭐ அலகுகள்: <strong id="hdr-modules">0 / 25</strong></div>
+      <div class="stat-item">⏱️ கற்றல் நேரம்: <strong id="hdr-timer">0m 0s</strong></div>
+      <div class="progress-container">
+        <div class="progress-label">
+          <span>தேர்ச்சி முன்னேற்றம்</span>
+          <span id="hdr-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="hdr-bar"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- முதன்மைப் பணியிடம் -->
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-section-title">பகுதி 1: அடிப்படைக் கருத்துகள் (1–15)</div>
+      <div id="nav-list-fundamental"></div>
+
+      <div class="sidebar-section-title grade-lvl">பகுதி 2: வகுப்புநிலைப் பாடப்பொருள் (16–25)</div>
+      <div id="nav-list-grade"></div>
+
+      <button class="nav-btn cert-btn" id="btn-cert-nav" onclick="showCertificate()">
+        <span>🎓 A4 சான்றிதழ் &amp; பணிப் பதிவேடு</span>
+        <span>&rarr;</span>
+      </button>
+    </aside>
+
+    <main class="main">
+      <div id="modules-container"></div>
+
+      <!-- சான்றிதழ் மற்றும் பணிப் பதிவேட்டுத் திரை -->
+      <div class="module-card" id="cert-view">
+        <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <h2 style="margin:0; border:none;">🎓 பாராட்டுச் சான்றிதழ் &amp; தினசரிப் பணிப் பதிவேடு (A4)</h2>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button class="btn-gold-download" onclick="downloadA4PortraitSheet()">⬇️ Download A4 Certificate &amp; Log (PNG)</button>
+            <button class="btn-check" onclick="window.print()">🖨️ Print / Save 1-Page A4 PDF</button>
+            <button class="btn-secondary" style="margin-left:0;" onclick="resetCurrentStudent()">🗑️ Reset My Progress</button>
+          </div>
+        </div>
+
+        <!-- நீல நிற சான்றிதழ் அட்டை -->
+        <div class="certificate-frame" id="certificate-box">
+          <div class="cert-emblem">🏆</div>
+          <div class="cert-header">பள்ளிக் கல்வித்துறை • தமிழ்நாடு அரசு (THIRAN - வகுப்பு 9 கணிதம்)</div>
+          <div class="cert-title">தேர்ச்சி மற்றும் நிறைவுச் சான்றிதழ்</div>
+          <p class="cert-subtitle">இச்சான்றிதழ் பெருமையுடன் வழங்கப்படுவது</p>
+          <div class="cert-student-name" id="cert-name">மாணவர் பெயர்</div>
+          <div class="cert-details" id="cert-meta">
+            வகுப்பு &amp; பிரிவு • வரிசை எண் • பள்ளியின் பெயர்
+          </div>
+
+          <div class="congrats-banner" id="cert-congrats">
+            தொடர்ந்து முயற்சி செய்யுங்கள்! 25 அலகுகளையும் உங்கள் கற்றல் வேகத்தில் நிறைவு செய்து முழுத் தேர்ச்சி பெறுங்கள்!
+          </div>
+
+          <div class="cert-stats-grid">
+            <div class="cert-stat-card">
+              <span>மொத்தத் தேர்ச்சி சதவீதம்</span>
+              <strong id="cert-mastery">0%</strong>
+            </div>
+            <div class="cert-stat-card">
+              <span>எடுத்துக்கொண்ட கற்றல் நேரம்</span>
+              <strong id="cert-duration">0m 0s</strong>
+            </div>
+            <div class="cert-stat-card">
+              <span>நிறைவு செய்த அலகுகள்</span>
+              <strong id="cert-mod-count">0 / 25</strong>
+            </div>
+          </div>
+
+          <p class="cert-dates-line" id="cert-span-dates">
+            தொடங்கிய நாள்: -- | கடைசியாகப் பயிற்சி செய்தது: --
+          </p>
+
+          <div class="cert-designer-credit">
+            ✦ Designed by Thiraviya Kumar G ✦
+          </div>
+        </div>
+
+        <!-- 25 அலகுகளின் தினசரிப் பணிப் பதிவேடு -->
+        <div class="log-section-header">
+          <h3>📅 தினசரிப் பணிப் பதிவேடு ("என்னால் முடியும்... நானே செய்வேன்..." - 25 அலகுகள்)</h3>
+          <p>அனைத்து 25 அலகுகளும் ஒரே A4 பக்கத்தில் பொருந்தும் வகையில் வடிவமைக்கப்பட்டுள்ளது.</p>
+        </div>
+        <div class="log-grid-two-col">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>பகுதி 1: அடிப்படைக் கருத்துகள் (1–15)</th>
+                <th>நிலை</th>
+                <th>மதிப்பெண்</th>
+                <th>நாள்</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-left"></tbody>
+          </table>
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>பகுதி 2: வகுப்புநிலைப் பாடப்பொருள் (16–25)</th>
+                <th>நிலை</th>
+                <th>மதிப்பெண்</th>
+                <th>நாள்</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-right"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- அடிக்குறிப்பு (Footer) -->
+  <footer class="app-footer">
+    திறன் (THIRAN) வகுப்பு 9 - கணிதம் (தமிழ் வழி) பயிற்சி நூல் இணையதளம் • Designed by Thiraviya Kumar G
+  </footer>
+
+  <script>
+    const QUESTIONS_PER_MODULE = 5;
+
+    // ============================================================================
+    // வகுப்பு 9 கணிதம் (தமிழ் வழி) வினா வங்கி: 25 அலகுகள்
+    // ============================================================================
+    const MODULES_DATA = [
+      // ---------------- பகுதி 1: அடிப்படைக் கருத்துகள் (அலகுகள் 1–15) ----------------
+      {
+        id: 1, category: "fundamental", title: "1. எண்கள் மற்றும் இடமதிப்பு",
+        desc: "எண்களின் இடமதிப்பு, விரிவான வடிவம் மற்றும் சுருங்கிய வடிவம் (பக்கம் 3–5).",
+        passage: "குறிப்பு (பக்கம் 5): 826 இன் விரிவாக்க வடிவம் 800 + 20 + 6 ஆகும். 5000 + 300 + 40 + 7 இன் சுருங்கிய வடிவம் 5347 ஆகும். மிகச்சிறிய எட்டிலக்க எண் 1,00,00,000 (ஒரு கோடி) ஆகும்.",
+        questionPool: [
+          { id: "m1q1", q: "826 இன் விரிவாக்க வடிவம் எது? (பக்கம் 5)", type: "select", options: ["800 + 20 + 6", "80 + 20 + 6", "800 + 60 + 2"], ans: "800 + 20 + 6" },
+          { id: "m1q2", q: "5000 + 300 + 40 + 7 இன் சுருங்கிய வடிவம் என்ன? (பக்கம் 5)", type: "select", options: ["5347", "5437", "3547"], ans: "5347" },
+          { id: "m1q3", q: "மிகச்சிறிய எட்டிலக்க எண் எது? (பக்கம் 5)", type: "select", options: ["1,00,00,000 (ஒரு கோடி)", "99,99,999", "10,00,000"], ans: "1,00,00,000 (ஒரு கோடி)" },
+          { id: "m1q4", q: "300000 + 7000 + 500 + 80 + 1 இன் சுருங்கிய வடிவம் என்ன? (பக்கம் 5)", type: "select", options: ["307581", "375081", "3007581"], ans: "307581" },
+          { id: "m1q5", q: "2 ஆயிரங்கள், 3 நூறுகள், 6 பத்துகள் மற்றும் 4 ஒன்றுகளைக் கொண்ட எண் எது? (பக்கம் 5)", type: "select", options: ["2364", "2634", "3264"], ans: "2364" }
+        ]
+      },
+      {
+        id: 2, category: "fundamental", title: "2. எண்களை ஒப்பிடுதல்",
+        desc: "எண்களை ஒப்பிடுதல், ஏறுவரிசை மற்றும் இறங்குவரிசை (பக்கம் 6–8).",
+        passage: "குறிப்பு (பக்கம் 6–8): கொடுக்கப்பட்ட எண்களை <, >, = குறியீடுகளைப் பயன்படுத்தி ஒப்பிடலாம். எண்களைச் சிறியதிலிருந்து பெரியதாக எழுதுவது ஏறுவரிசை என்றும், பெரியதிலிருந்து சிறியதாக எழுதுவது இறங்குவரிசை என்றும் அழைக்கப்படும்.",
+        questionPool: [
+          { id: "m2q1", q: "சரியான குறியீட்டுடன் பொருத்துக: 12 ______ 14 (பக்கம் 6)", type: "select", options: ["<", ">", "="], ans: "<" },
+          { id: "m2q2", q: "சரியான குறியீட்டுடன் பொருத்துக: 61 ______ 16 (பக்கம் 6)", type: "select", options: [">", "<", "="], ans: ">" },
+          { id: "m2q3", q: "6735, 4378, 6753, 4387 ஆகிய எண்களில் மிகப்பெரிய எண் எது? (பக்கம் 6)", type: "select", options: ["6753", "6735", "4387"], ans: "6753" },
+          { id: "m2q4", q: "8427, 8472, 8724, 8742 ஆகிய எண்களில் மிகச்சிறிய எண் எது? (பக்கம் 6)", type: "select", options: ["8427", "8472", "8724"], ans: "8427" },
+          { id: "m2q5", q: "2741 இன் முன்னி (Predecessor) எண் என்ன? (பக்கம் 7)", type: "select", options: ["2740", "2742", "2739"], ans: "2740" }
+        ]
+      },
+      {
+        id: 3, category: "fundamental", title: "3. கூட்டல்",
+        desc: "இரண்டு மற்றும் பல இலக்க எண்களின் கூட்டல் செயல்பாடுகள் (பக்கம் 9–10).",
+        passage: "குறிப்பு (பக்கம் 9): எண்களின் இடமதிப்புக்கேற்ப நேராக எழுதி ஒன்றாம் இலக்கத்திலிருந்து கூட்டத் தொடங்க வேண்டும்.",
+        questionPool: [
+          { id: "m3q1", q: "கூட்டுக: 45 + 33 = ? (பக்கம் 9)", type: "select", options: ["78", "88", "77"], ans: "78" },
+          { id: "m3q2", q: "கூட்டுக: 233 + 125 = ? (பக்கம் 9)", type: "select", options: ["358", "348", "368"], ans: "358" },
+          { id: "m3q3", q: "கூட்டுக: 3257 + 3421 = ? (p. 9)", type: "select", options: ["6678", "6578", "6778"], ans: "6678" },
+          { id: "m3q4", q: "கூட்டுக: 28 + 25 = ? (பக்கம் 10)", type: "select", options: ["53", "43", "63"], ans: "53" },
+          { id: "m3q5", q: "கூட்டுக: 124 + 118 = ? (பக்கம் 10)", type: "select", options: ["242", "232", "252"], ans: "242" }
+        ]
+      },
+      {
+        id: 4, category: "fundamental", title: "4. கழித்தல்",
+        desc: "எண்களைக் கழித்தல் மற்றும் கடன் வாங்கும் முறை (பக்கம் 11–12).",
+        passage: "குறிப்பு (பக்கம் 11): பெரிய எண்ணிலிருந்து சிறிய எண்ணைக் கழிக்க வேண்டும். தேவைப்படும்போது பக்கத்து இடமதிப்பிலிருந்து கடன் வாங்க வேண்டும்.",
+        questionPool: [
+          { id: "m4q1", q: "கழிக்க: 35 - 17 = ? (பக்கம் 11)", type: "select", options: ["18", "16", "19"], ans: "18" },
+          { id: "m4q2", q: "கழிக்க: 374 - 125 = ? (பக்கம் 11)", type: "select", options: ["249", "259", "239"], ans: "249" },
+          { id: "m4q3", q: "கழிக்க: 3769 - 1457 = ? (பக்கம் 11)", type: "select", options: ["2312", "2212", "2412"], ans: "2312" },
+          { id: "m4q4", q: "கழிக்க: 54 - 25 = ? (பக்கம் 12)", type: "select", options: ["29", "39", "19"], ans: "29" },
+          { id: "m4q5", q: "கழிக்க: 533 - 347 = ? (பக்கம் 12)", type: "select", options: ["186", "176", "196"], ans: "186" }
+        ]
+      },
+      {
+        id: 5, category: "fundamental", title: "5. பெருக்கல்",
+        desc: "பெருக்கல் வாய்ப்பாடுகள் மற்றும் பெருக்கல் செயல்பாடுகள் (பக்கம் 13–14).",
+        passage: "குறிப்பு (பக்கம் 13): 8 x 2 = 16, 9 x 3 = 27 என்பவை அடிப்படைப் பெருக்கல் வாய்ப்பாடுகள் ஆகும்.",
+        questionPool: [
+          { id: "m5q1", q: "மதிப்பு காண்க: 8 x 2 = ? (பக்கம் 13)", type: "select", options: ["16", "18", "14"], ans: "16" },
+          { id: "m5q2", q: "மதிப்பு காண்க: 9 x 3 = ? (பக்கம் 13)", type: "select", options: ["27", "24", "30"], ans: "27" },
+          { id: "m5q3", q: "பெருக்குக: 72 x 4 = ? (பக்கம் 13)", type: "select", options: ["288", "278", "298"], ans: "288" },
+          { id: "m5q4", q: "பெருக்குக: 25 x 15 = ? (பக்கம் 13)", type: "select", options: ["375", "350", "400"], ans: "375" },
+          { id: "m5q5", q: "பெருக்குக: 634 x 75 = ? (பக்கம் 14)", type: "select", options: ["47550", "46550", "48550"], ans: "47550" }
+        ]
+      },
+      {
+        id: 6, category: "fundamental", title: "6. வர்க்க எண்கள்",
+        desc: "முழு வர்க்க எண்களைச் சோதித்தல் மற்றும் கண்டறிதல் (பக்கம் 15–16).",
+        passage: "குறிப்பு (பக்கம் 15): ஒரு எண்ணைத் தம்மால் பெருக்கக் கிடைக்கும் எண் வர்க்க எண் எனப்படும். எடுத்துக்காட்டாக, 7 இன் வர்க்க எண் 49 ஆகும். 36 என்பது 6 இன் வர்க்க எண் ஆகும்.",
+        questionPool: [
+          { id: "m6q1", q: "7 என்பதன் வர்க்க எண் என்ன? (பக்கம் 15)", type: "select", options: ["49", "42", "56"], ans: "49" },
+          { id: "m6q2", q: "64 என்பது எந்த எண்ணின் வர்க்க எண்? (பக்கம் 15)", type: "select", options: ["8", "7", "9"], ans: "8" },
+          { id: "m6q3", q: "9 என்பதன் வர்க்க எண் என்ன? (பக்கம் 15)", type: "select", options: ["81", "72", "99"], ans: "81" },
+          { id: "m6q4", q: "144 என்பது எந்த எண்ணின் வர்க்க எண்? (பக்கம் 15)", type: "select", options: ["12", "11", "14"], ans: "12" },
+          { id: "m6q5", q: "கொடுக்கப்பட்டவற்றுள் முழு வர்க்க எண்களைத் தேர்ந்தெடுக்க: 15, 36, 48, 80 (பக்கம் 15)", type: "select", options: ["36", "15", "48"], ans: "36" }
+        ]
+      },
+      {
+        id: 7, category: "fundamental", title: "7. மீச்சிறு பொது மடங்கு (மீ.சி.ம)",
+        desc: "மடங்குகள், பொது மடங்குகள் மற்றும் மீ.சி.ம காண் முறைகள் (பக்கம் 17–18).",
+        passage: "குறிப்பு (பக்கம் 17): இரண்டு அல்லது அதற்கு மேற்பட்ட எண்களின் மடங்குகளில் பொதுவான மிகச்சிறிய மடங்கு மீச்சிறு பொது மடங்கு (மீ.சி.ம) எனப்படும்.",
+        questionPool: [
+          { id: "m7q1", q: "2 இன் முதல் மூன்று மடங்குகளில் வராத எண் எது? (பக்கம் 17)", type: "select", options: ["5", "2", "4"], ans: "5" },
+          { id: "m7q2", q: "3 இன் மடங்குகள் எவை? (பக்கம் 17)", type: "select", options: ["3, 6, 9, 12...", "2, 4, 6, 8...", "5, 10, 15..."], ans: "3, 6, 9, 12..." },
+          { id: "m7q3", q: "2 மற்றும் 3 இன் பொது மடங்குகளில் முதலாவது எண் எது? (பக்கம் 17)", type: "select", options: ["6", "12", "18"], ans: "6" },
+          { id: "m7q4", q: "4 மற்றும் 5 இன் மீ.சி.ம (LCM) காண்க. (பக்கம் 18)", type: "select", options: ["20", "9", "40"], ans: "20" },
+          { id: "m7q5", q: "5 மற்றும் 8 இன் மீ.சி.ம காண்க. (பக்கம் 18)", type: "select", options: ["40", "13", "45"], ans: "40" }
+        ]
+      },
+      {
+        id: 8, category: "fundamental", title: "8. வகுத்தல்",
+        desc: "வகுத்தல், ஈவு மற்றும் மீதி காணுதல் (பக்கம் 19–20).",
+        passage: "குறிப்பு (பக்கம் 19): ஒரு எண்ணை மற்றொரு எண்ணால் வகுக்கும்போது ஈவு (Quotient) மற்றும் மீதி (Remainder) கிடைக்கும்.",
+        questionPool: [
+          { id: "m8q1", q: "32 ÷ 4 இன் மதிப்பு என்ன? (பக்கம் 19)", type: "select", options: ["8", "6", "7"], ans: "8" },
+          { id: "m8q2", q: "45 ÷ 3 இன் மதிப்பு என்ன? (பக்கம் 19)", type: "select", options: ["15", "12", "14"], ans: "15" },
+          { id: "m8q3", q: "28 ÷ 2 இன் மதிப்பு என்ன? (பக்கம் 19)", type: "select", options: ["14", "12", "16"], ans: "14" },
+          { id: "m8q4", q: "140 ÷ 6 இல் ஈவு மற்றும் மீதியைக் காண்க. (பக்கம் 19)", type: "select", options: ["ஈவு = 23, மீதி = 2", "ஈவு = 22, மீதி = 4", "ஈவு = 24, மீதி = 1"], ans: "ஈவு = 23, மீதி = 2" },
+          { id: "m8q5", q: "2480 ÷ 16 இன் மதிப்பு என்ன? (பக்கம் 20)", type: "select", options: ["155", "150", "160"], ans: "155" }
+        ]
+      },
+      {
+        id: 9, category: "fundamental", title: "9. மீப்பெரு பொதுக்காரணி (மீ.பெ.கா)",
+        desc: "காரணிகள், பொதுக்காரணிகள் மற்றும் மீ.பெ.கா (HCF) காணுதல் (பக்கம் 21–22).",
+        passage: "குறிப்பு (பக்கம் 21): கொடுக்கப்பட்ட எண்களின் காரணிகளில் பொதுவான பெரிய காரணி மீப்பெரு பொதுக்காரணி (மீ.பெ.கா) எனப்படும்.",
+        questionPool: [
+          { id: "m9q1", q: "20 இன் காரணிகள் எவை? (பக்கம் 21)", type: "select", options: ["1, 2, 4, 5, 10, 20", "1, 3, 5, 10, 20", "2, 4, 6, 8, 10"], ans: "1, 2, 4, 5, 10, 20" },
+          { id: "m9q2", q: "24 இன் காரணிகளில் வராத எண் எது? (பக்கம் 21)", type: "select", options: ["5", "1", "2", "3"], ans: "5" },
+          { id: "m9q3", q: "8 மற்றும் 12 இன் பொதுக்காரணிகள் எவை? (பக்கம் 21)", type: "select", options: ["1, 2, 4", "1, 2, 3, 4", "2, 4, 8"], ans: "1, 2, 4" },
+          { id: "m9q4", q: "15 மற்றும் 25 இன் மீ.பெ.கா (HCF) காண்க. (பக்கம் 22)", type: "select", options: ["5", "1", "3"], ans: "5" },
+          { id: "m9q5", q: "20 மற்றும் 28 இன் மீ.பெ.கா காண்க. (பக்கம் 22)", type: "select", options: ["4", "2", "5"], ans: "4" }
+        ]
+      },
+      {
+        id: 10, category: "fundamental", title: "10. வகுபடும் தன்மை",
+        desc: "2, 3, 4, 5, 6, 9, 11 இன் வகுபடும் தன்மைகள் (பக்கம் 23–24).",
+        passage: "குறிப்பு (பக்கம் 23): ஒரு எண்ணின் ஒன்றாம் இலக்கம் 0, 2, 4, 6, 8 எனில் அது 2 ஆல் வகுபடும். இலக்கங்களின் கூடுதல் 3 இன் மடங்காக இருந்தால் அது 3 ஆல் வகுபடும்.",
+        questionPool: [
+          { id: "m10q1", q: "கொடுக்கப்பட்ட எண்களில் 2 ஆல் வகுபடும் எண் எது? (பக்கம் 23)", type: "select", options: ["48", "35", "41"], ans: "48" },
+          { id: "m10q2", q: "கொடுக்கப்பட்ட எண்களில் 3 ஆல் வகுபடும் எண் எது? (பக்கம் 23)", type: "select", options: ["75", "46", "64"], ans: "75" },
+          { id: "m10q3", q: "கொடுக்கப்பட்ட எண்களில் 5 ஆல் வகுபடும் எண் எது? (பக்கம் 23)", type: "select", options: ["45", "31", "41"], ans: "45" },
+          { id: "m10q4", q: "94 என்ற எண் எந்த எண்ணால் வகுபடும்? (பக்கம் 24)", type: "select", options: ["2", "3", "5"], ans: "2" },
+          { id: "m10q5", q: "381 என்ற எண் எந்த எண்ணால் வகுபடும்? (பக்கம் 24)", type: "select", options: ["3", "2", "5"], ans: "3" }
+        ]
+      },
+      {
+        id: 11, category: "fundamental", title: "11. எண் அமைப்பு",
+        desc: "பகா எண்கள், பகு எண்கள், ஒற்றை மற்றும் இரட்டை எண்கள் (பக்கம் 25–26).",
+        passage: "குறிப்பு (பக்கம் 25): 1 மற்றும் தன்ைைத் தவிர வேறு காரணிகள் இல்லாத எண்கள் பகா எண்கள் எனப்படும். ஒன்று (1) என்பது பகு எண்ணும் அன்று, பகா எண்ணும் அன்று.",
+        questionPool: [
+          { id: "m11q1", q: "கொடுக்கப்பட்ட எண்களில் பகா எண் எது? (பக்கம் 25)", type: "select", options: ["23", "27", "34"], ans: "23" },
+          { id: "m11q2", q: "கொடுக்கப்பட்ட எண்களில் பகு எண் எது? (பக்கம் 25)", type: "select", options: ["33", "23", "71"], ans: "33" },
+          { id: "m11q3", q: "20 க்கും 30 க்கும் இடைப்பட்ட பகு எண் எது? (பக்கம் 25)", type: "select", options: ["21, 22, 24, 25, 26, 27", "23, 29", "21, 23, 29"], ans: "21, 22, 24, 25, 26, 27" },
+          { id: "m11q4", q: "1 என்பது பகு எண்ணா அல்லது பகா எண்ணா? (பக்கம் 25)", type: "select", options: ["இரண்டும் அல்ல", "பகா எண்", "பகு எண்"], ans: "இரண்டும் அல்ல" },
+          { id: "m11q5", q: "முழு எண்களில் மிகச்சிறிய எண் எது? (பக்கம் 26)", type: "select", options: ["0", "1", "-1"], ans: "0" }
+        ]
+      },
+      {
+        id: 12, category: "fundamental", title: "12. முழுக்களின் மீதான செயல்பாடுகள்",
+        desc: "முழுக்களின் கூட்டல், கழித்தல், பெருக்கல் மற்றும் வகுத்தல் (பக்கம் 27).",
+        passage: "குறிப்பு (பக்கம் 27): குறி விதிகள்: (+)*(+) = +, (-)*(-) = +, (+)*(-) = -.",
+        questionPool: [
+          { id: "m12q1", q: "மதிப்பு காண்க: 15 + (-7) = ? (பக்கம் 27)", type: "select", options: ["8", "-8", "22"], ans: "8" },
+          { id: "m12q2", q: "மதிப்பு காண்க: (-29) + (-16) = ? (பக்கம் 27)", type: "select", options: ["-45", "45", "-13"], ans: "-45" },
+          { id: "m12q3", q: "மதிப்பு காண்க: 8 - (-12) = ? (பக்கம் 27)", type: "select", options: ["20", "-4", "-20"], ans: "20" },
+          { id: "m12q4", q: "மதிப்பு காண்க: (-10) x (-7) = ? (பக்கம் 27)", type: "select", options: ["70", "-70", "-17"], ans: "70" },
+          { id: "m12q5", q: "மதிப்பு காண்க: (-65) ÷ (-13) = ? (பக்கம் 27)", type: "select", options: ["5", "-5", "13"], ans: "5" }
+        ]
+      },
+      {
+        id: 13, category: "fundamental", title: "13. பின்ன எண்கள் மற்றும் தசம எண்கள்",
+        desc: "தகு மற்றும் தகா பின்னங்கள், தசம எண்கள் (பக்கம் 28–29).",
+        passage: "குறிப்பு (பக்கம் 28): தொகுதியானது பகுதியைவிடச் சிறியதாக இருந்தால் அது தகு பின்னம் எனப்படும். தொகுதியானது பகுதியைவிடப் பெரியதாக இருந்தால் அது தகா பின்னம் எனப்படும்.",
+        questionPool: [
+          { id: "m13q1", q: "தொகுதி பகுதியைவிடச் சிறியதாக இருந்தால் அந்தப் பின்னம் என்ன? (பக்கம் 28)", type: "select", options: ["தகு பின்னம்", "தகா பின்னம்", "கலப்பு பின்னம்"], ans: "தகு பின்னம்" },
+          { id: "m13q2", q: "தொகுதி பகுதியைவிடப் பெரியதாக இருந்தால் அந்தப் பின்னம் என்ன? (பக்கம் 28)", type: "select", options: ["தகா பின்னம்", "தகு பின்னம்", "சம பின்னம்"], ans: "தகா பின்னம்" },
+          { id: "m13q3", q: "கொடுக்கப்பட்டவற்றுள் தகு பின்னத்தைத் தேர்ந்தெடுக்க: 1/5, 3/2, 4/7, 7/5 (பக்கம் 28)", type: "select", options: ["1/5 மற்றும் 4/7", "3/2", "7/5"], ans: "1/5 மற்றும் 4/7" },
+          { id: "m13q4", q: "12/10 இன் தசம வடிவம் என்ன? (பக்கம் 29)", type: "select", options: ["1.2", "0.12", "12.0"], ans: "1.2" },
+          { id: "m13q5", q: "148/100 இன் தசம வடிவம் என்ன? (பக்கம் 29)", type: "select", options: ["1.48", "14.8", "0.148"], ans: "1.48" }
+        ]
+      },
+      {
+        id: 14, category: "fundamental", title: "14. பின்னங்களின் அடிப்படை செயல்பாடுகள்",
+        desc: "பின்னங்களின் கூட்டல், கழித்தல், பெருக்கல் மற்றும் வகுத்தல் (பக்கம் 30–31).",
+        passage: "குறிப்பு (பக்கம் 30–31): சமமான பகுதிகளை உடைய பின்னங்களைக் கூட்டும்போது தொகுதிகளை மட்டும் கூட்ட வேண்டும். பெருக்கலின்போது தொகுதிக்குத் தொகுதியும் பகுதிக்குப் பகுதியும் பெருக்கப்படும்.",
+        questionPool: [
+          { id: "m14q1", q: "மதிப்பு காண்க: 3/7 + 2/7 = ? (பக்கம் 30)", type: "select", options: ["5/7", "1/7", "5/14"], ans: "5/7" },
+          { id: "m14q2", q: "மதிப்பு காண்க: 3/5 - 1/5 = ? (பக்கம் 30)", type: "select", options: ["2/5", "4/5", "2/10"], ans: "2/5" },
+          { id: "m14q3", q: "மதிப்பு காண்க: 2/5 x 3/6 = ? (பக்கம் 31)", type: "select", options: ["1/5", "6/30", "5/11"], ans: "1/5" },
+          { id: "m14q4", q: "மதிப்பு காண்க: 4/9 ÷ 8/6 = ? (பக்கம் 31)", type: "select", options: ["1/3", "32/54", "2/3"], ans: "1/3" },
+          { id: "m14q5", q: "மதிப்பு காண்க: 5/11 x 77/10 = ? (பக்கம் 31)", type: "select", options: ["7/2", "35/110", "11/2"], ans: "7/2" }
+        ]
+      },
+      {
+        id: 15, category: "fundamental", title: "15. அளவைகள்",
+        desc: "நீளம், நிறை மற்றும் கொள்ளளவு அலகுகளை மாற்றுதல் (பக்கம் 32).",
+        passage: "குறிப்பு (பக்கம் 32): 1 செ.மீ = 10 மி.மீ, 1 மீ = 100 செ.மீ, 1 கி.கி = 1000 கி.கிராம், 1 லிட்டர் = 1000 மில்லி லிட்டர்.",
+        questionPool: [
+          { id: "m15q1", q: "கோடிட்ட இடங்களை நிரப்புக: 80 மி.மீ = ______ செ.மீ (பக்கம் 32)", type: "select", options: ["8", "80", "0.8"], ans: "8" },
+          { id: "m15q2", q: "கோடிட்ட இடங்களை நிரப்புக: 1000 மி.மீ = ______ மீ (பக்கம் 32)", type: "select", options: ["1", "10", "100"], ans: "1" },
+          { id: "m15q3", q: "கோடிட்ட இடங்களை நிரப்புக: 1000 மி.கி = ______ கி (பக்கம் 32)", type: "select", options: ["1", "10", "100"], ans: "1" },
+          { id: "m15q4", q: "கோடிட்ட இடங்களை நிரப்புக: 1000 மி.லி = ______ லி (பக்கம் 32)", type: "select", options: ["1", "10", "100"], ans: "1" },
+          { id: "m15q5", q: "கோடிட்ட இடங்களை நிரப்புக: 4000 மி.கி = ______ கி (பக்கம் 32)", type: "select", options: ["4", "40", "400"], ans: "4" }
+        ]
+      },
+
+      // ---------------- பகுதி 2: வகுப்புநிலைப் பாடப்பொருள் (அலகுகள் 16–25) ----------------
+      {
+        id: 16, category: "grade", title: "வ1. விகிதமுறு எண்கள்",
+        desc: "விகிதமுறு எண்களின் வரையறை, எண் கோட்டில் குறித்தல் (பக்கம் 37).",
+        passage: "குறிப்பு (பக்கம் 37): விகிதமுறு எண்களானது p/q என்ற வடிவில் குறிக்கப்படுகிறது (இங்கு q ≠ 0). அனைத்து விகிதமுறு எண்களின் தொகுப்பானது Q எனக் குறிக்கப்படுகிறது. 0 என்பது ஒரு விகிதமுறு எண் ஆகும்.",
+        questionPool: [
+          { id: "m16q1", q: "விகிதமுறு எண்ணானது எந்த வடிவத்தில் குறிக்கப்படுகிறது? (பக்கம் 37)", type: "select", options: ["p/q (இங்கு q ≠ 0)", "p x q", "p + q"], ans: "p/q (இங்கு q ≠ 0)" },
+          { id: "m16q2", q: "அனைத்து விகிதமுறு எண்களின் தொகுப்பானது எவ்வாறு குறிக்கப்படுகிறது? (பக்கம் 37)", type: "select", options: ["Q", "N", "W", "Z"], ans: "Q" },
+          { id: "m16q3", q: "0.25 என்பதன் விகிதமுறு வடிவம் என்ன? (பக்கம் 37)", type: "select", options: ["1/4", "1/2", "3/4"], ans: "1/4" },
+          { id: "m16q4", q: "1.5 என்பதன் விகிதமுறு வடிவம் என்ன? (பக்கம் 37)", type: "select", options: ["3/2", "5/10", "1/5"], ans: "3/2" },
+          { id: "m16q5", q: "0 என்பது ஒரு விகிதமுறு எண்ணா? (பக்கம் 37)", type: "select", options: ["ஆம்", "இல்லை", "கூற இயலாது"], ans: "ஆம்" }
+        ]
+      },
+      {
+        id: 17, category: "grade", title: "வ2. விகிதமுறு எண்களின் பண்புகள்",
+        desc: "அடைவு, பரிமாற்று, சேர்ப்பு, சமனி மற்றும் நேர்மாறு பண்புகள் (பக்கம் 38–39).",
+        passage: "குறிப்பு (பக்கம் 38–39): விகிதமுறு எண்களுக்கான கூட்டல் மற்றும் பெருக்கல் பரிமாற்றுப் பண்பு, சேர்ப்புப் பண்பு மற்றும் சமனிப் பண்புகளை நிறைவு செய்யும்.",
+        questionPool: [
+          { id: "m17q1", q: "(-2/13) + 0 = 0 + (-2/13) = -2/13 என்பது எந்தப் பண்பைக் குறிக்கிறது? (பக்கம் 38)", type: "select", options: ["சமனிப் பண்பு (Additive Identity)", "பரிமாற்றுப் பண்பு", "அடைவுப் பண்பு"], ans: "சமனிப் பண்பு (Additive Identity)" },
+          { id: "m17q2", q: "2/9 + 4/9 = 4/9 + 2/9 என்பது எந்தப் பண்பைக் குறிக்கிறது? (பக்கம் 38)", type: "select", options: ["பரிமாற்றுப் பண்பு (Commutative)", "சேர்ப்புப் பண்பு", "நேர்மாறு பண்பு"], ans: "பரிமாற்றுப் பண்பு (Commutative)" },
+          { id: "m17q3", q: "a + (b + c) = (a + b) + c என்பது எந்தப் பண்பைக் குறிக்கிறது? (பக்கம் 38)", type: "select", options: ["சேர்ப்புப் பண்பு (Associative)", "பரிமாற்றுப் பண்பு", "அடைவுப் பண்பு"], ans: "சேர்ப்புப் பண்பு (Associative)" },
+          { id: "m17q4", q: "5/9 x 9/5 = 1 என்பது எதை weist? (பக்கம் 38)", type: "select", options: ["பெருக்கல் நேர்மாறு (Multiplicative Inverse)", "கூட்டல் நேர்மாறு", "சமனி"], ans: "பெருக்கல் நேர்மாறு (Multiplicative Inverse)" },
+          { id: "m17q5", q: "2/3 + (-2/3) = 0 என்பது எந்தப் பண்பைக் குறிக்கிறது? (பக்கம் 39)", type: "select", options: ["கூட்டல் நேர்மாறு (Additive Inverse)", "பெருக்கல் நேர்மாறு", "சமனிப் பண்பு"], ans: "கூட்டல் நேர்மாறு (Additive Inverse)" }
+        ]
+      },
+      {
+        id: 18, category: "grade", title: "வ3. வர்க்கம் மற்றும் வர்க்கமூலம்",
+        desc: "பகாக் காரணிப்படுத்துதல் முறையில் வர்க்கமூலம் காணுதல் (பக்கம் 40).",
+        passage: "குறிப்பு (பக்கம் 40): கொடுக்கப்பட்ட எண்களைப் பகாக் காரணிகளாகப் பிரித்து, ஜோடி ஜோடியாக வெளியே எடுப்பதன் மூலம் வர்க்கமூலம் காணலாம். எடுத்துக்காட்டாக, 36 இன் வர்க்க மூலம் 6 ஆகும்.",
+        questionPool: [
+          { id: "m18q1", q: "வர்க்க மூலம் காண்க: 2 x 2 x 5 x 5 (பக்கம் 40)", type: "select", options: ["10", "20", "25"], ans: "10" },
+          { id: "m18q2", q: "வர்க்க மூலம் காண்க: 9/64 (பக்கம் 40)", type: "select", options: ["3/8", "9/8", "3/16"], ans: "3/8" },
+          { id: "m18q3", q: "36 இன் வர்க்க மூலம் பகாக் காரணிப்படுத்துதல் மூலம் காண்க. (பக்கம் 40)", type: "select", options: ["6", "9", "12"], ans: "6" },
+          { id: "m18q4", q: "144 இன் வர்க்க மூலம் காண்க. (பக்கம் 40)", type: "select", options: ["12", "14", "16"], ans: "12" },
+          { id: "m18q5", q: "வர்க்க மூலம் காண்க: 36 x 81 (பக்கம் 40)", type: "select", options: ["54", "36", "48"], ans: "54" }
+        ]
+      },
+      {
+        id: 19, category: "grade", title: "வ4. கனம் மற்றும் கனமூலம்",
+        desc: "எண்களின் கனம், கனமூலம் மற்றும் அடுக்கு விதிகள் (பக்கம் 41).",
+        passage: "குறிப்பு (பக்கம் 41): ஒரு எண்ணைத் தம்மால் மூன்று முறை பெருக்கக் கிடைக்கும் எண் கன எண் எனப்படும். மூன்று காரணிகள் கொண்ட ஜோடியிலிருந்து ஒன்றை எடுப்பது கனமூலம் ஆகும். அடுக்கு விதி: (a^m) / (a^n) = a^(m-n).",
+        questionPool: [
+          { id: "m19q1", q: "216 இன் கனமூலம் (Cube Root) காண்க. (பக்கம் 41)", type: "select", options: ["6", "8", "4"], ans: "6" },
+          { id: "m19q2", q: "8 x 64 இன் கனமூலம் காண்க. (பக்கம் 41)", type: "select", options: ["16", "32", "8"], ans: "16" },
+          { id: "m19q3", q: "(-2)^5 ÷ (-2)^-3 இன் மதிப்பு காண்க. (பக்கம் 41)", type: "select", options: ["(-2)^8", "(-2)^2", "(-2)^-2"], ans: "(-2)^8" },
+          { id: "m19q4", q: "(-4)^8 ÷ (-4)^5 இன் மதிப்பு காண்க. (பக்கம் 41)", type: "select", options: ["(-4)^3", "(-4)^13", "(-4)^3"], ans: "(-4)^3" },
+          { id: "m19q5", q: "64 இன் கனமூலம் என்ன?", type: "select", options: ["4", "8", "6"], ans: "4" }
+        ]
+      },
+      {
+        id: 20, category: "grade", title: "வ5. வட்டம் மற்றும் கூட்டு வடிவங்கள்",
+        desc: "வட்டத்தின் பகுதிகள், விட்டமும் ஆரமும், கூட்டு வடிவங்களின் சுற்றளவு மற்றும் பரப்பளவு (பக்கம் 42–43).",
+        passage: "குறிப்பு (பக்கம் 42–43): வட்டத்தின் மையப்புள்ளி வழியே செல்லும் மிகப்பெரிய நாண் விட்டம் (Diameter) எனப்படும். விட்டம் ஆரத்தைப் போல இருமடங்கு ஆகும் (d = 2r).",
+        questionPool: [
+          { id: "m20q1", q: "வட்டத்தின் மையப்புள்ளி வழியே செல்லும் மிகப்பெரிய நாண் எது? (பக்கம் 42)", type: "select", options: ["விட்டம்", "ஆரம்", "வில்"], ans: "விட்டம்" },
+          { id: "m20q2", q: "24 செ.மீ விட்ட அளவுள்ள ஒரு வட்டத்தின் ஆரம் என்ன? (பக்கம் 42)", type: "select", options: ["12 செ.மீ", "48 செ.மீ", "6 செ.மீ"], ans: "12 செ.மீ" },
+          { id: "m20q3", q: "10 செ.மீ ஆர அளவுள்ள ஒரு வட்டத்தின் விட்டம் என்ன? (பக்கம் 42)", type: "select", options: ["20 செ.மீ", "5 செ.மீ", "100 செ.மீ"], ans: "20 செ.மீ" },
+          { id: "m20q4", q: "ஒரு வட்டத்தின் மையக்கோணம் எவ்வளவு டிகிரி? (பக்கம் 42)", type: "select", options: ["360°", "180°", "90°"], ans: "360°" },
+          { id: "m20q5", q: "ஒவ்வொரு வட்டகோணப்பகுதியின் வட்ட மையக் கோணம் எவ்வளவு? (பக்கம் 42)", type: "select", options: ["360°", "180°", "90°"], ans: "360°" }
+        ]
+      },
+      {
+        id: 21, category: "grade", title: "வ6. முப்பரிமாண உருவங்கள் மற்றும் இயற்கணிதம்",
+        desc: "முப்பரிமாண உருவங்களின் முகங்கள், விளிம்புகள், உச்சிகள் மற்றும் இயற்கணிதக் கோவைகள் (பக்கம் 44–45).",
+        passage: "குறிப்பு (பக்கம் 44–45): ஒரு கனசதுரத்தில் 6 முகங்கள், 12 விளிம்புகள் மற்றும் 8 உச்சிகள் உள்ளன. பல்லுறுப்புக்கோவையின் படியானது அதில் உள்ள மாறியின் உயர்ந்த அடுக்காகும்.",
+        questionPool: [
+          { id: "m21q1", q: "ஒரு கனசதுரத்திற்கு எத்தனை முகங்கள் உள்ளன? (பக்கம் 44)", type: "select", options: ["6", "8", "12"], ans: "6" },
+          { id: "m21q2", q: "5xy^2 + 7x^2y இல் xy^2 இன் கெழு (Coefficient) என்ன? (பக்கம் 45)", type: "select", options: ["5", "7", "xy"], ans: "5" },
+          { id: "m21q3", q: "4x^4 - 3x^2 + 5x - 7 என்ற பல்லுறுப்புக்கோவையின் படி (Degree) என்ன? (பக்கம் 45)", type: "select", options: ["4", "2", "1"], ans: "4" },
+          { id: "m21q4", q: "x^5 + 1 என்ற பல்லுறுப்புக்கோவையின் படி என்ன? (பக்கம் 45)", type: "select", options: ["5", "1", "6"], ans: "5" },
+          { id: "m21q5", q: "100 என்பது எவ்வகைக் கோவை? (பக்கம் 45)", type: "select", options: ["ஒருறுப்புக் கோவை", "ஈறுருப்புக் கோவை", "மூவுறுப்புக் கோவை"], ans: "ஒருறுப்புக் கோவை" }}
+      },
+      {
+        id: 22, category: "grade", title: "வ7. இயற்கணிதம் - அடிப்படை செயல்பாடுகள்",
+        desc: "இயற்கணிதக் கோவைகளின் கூட்டல், கழித்தல், பெருக்கல் மற்றும் வகுத்தல் (பக்கம் 46).",
+        passage: "குறிப்பு (பக்கம் 46): ஒத்த உறுப்புகளை மட்டுமே கூட்டவோ கழிக்கவோ முடியும். பெருக்கலின்போது அடுக்குகளைக் கூட்ட வேண்டும்.",
+        questionPool: [
+          { id: "m22q1", q: "கூட்டுக: (12m^2 + 9m + 5) + (4m^2 - 7m + 10) (பக்கம் 46)", type: "select", options: ["16m^2 + 2m + 15", "16m^2 + 16m + 15", "8m^2 + 2m + 5"], ans: "16m^2 + 2m + 15" },
+          { id: "m22q2", q: "மதிப்பு காண்க: (2x - 3)(4x - 5) (பக்கம் 46)", type: "select", options: ["8x^2 - 22x + 15", "8x^2 - 10x + 15", "8x^2 + 22x + 15"], ans: "8x^2 - 22x + 15" },
+          { id: "m22q3", q: "வகுக்க: (35a^4 + 14a^2) ÷ (7a^2) (பக்கம் 46)", type: "select", options: ["5a^2 + 2", "5a^2 + 7", "7a^2 + 2"], ans: "5a^2 + 2" },
+          { id: "m22q4", q: "கூட்டுக: (8a^2 - 12a + 9) + (5a^2 + 4a - 4) (பக்கம் 46)", type: "select", options: ["13a^2 - 8a + 5", "13a^2 + 8a + 5", "3a^2 - 8a + 5"], ans: "13a^2 - 8a + 5" },
+          { id: "m22q5", q: "கழிக்க: (5x^2 - 7x + 12) - (3x^2 + 4x + 6) (பக்கம் 46)", type: "select", options: ["2x^2 - 11x + 6", "2x^2 + 11x + 6", "8x^2 - 3x + 18"], ans: "2x^2 - 11x + 6" }
+        ]
+      },
+      {
+        id: 23, category: "grade", title: "வ8. இயற்கணித முற்றொருமைகள் & காரணிப்படுத்துதல்",
+        desc: "முற்றொருமைகள், கன முற்றொருமைகள் மற்றும் காரணிப்படுத்துதல் (பக்கம் 48–49).",
+        passage: "குறிப்பு (பக்கம் 48–49): (a+b)^2 = a^2 + 2ab + b^2 மற்றும் (a-b)^2 = a^2 - 2ab + b^2 என்பவை முக்கியமான இயற்கணித முற்றொருமைகள் ஆகும்.",
+        questionPool: [
+          { id: "m23q1", q: "(4x - 3y)^2 இன் விரிவாக்கம் என்ன? (பக்கம் 58)", type: "select", options: ["16x^2 - 24xy + 9y^2", "16x^2 + 24xy + 9y^2", "16x^2 - 9y^2"], ans: "16x^2 - 24xy + 9y^2" },
+          { id: "m23q2", q: "x^2 + 17x + 72 ஐக் காரணிப்படுத்துக. (பக்கம் 58)", type: "select", options: ["(x + 9)(x + 8)", "(x - 9)(x - 8)", "(x + 9)(x - 8)"], ans: "(x + 9)(x + 8)" },
+          { id: "m23q3", q: "முற்றொருமையைப் பயன்படுத்திப் காரணிப்படுத்துக: 49a^2 + 70ab + 25b^2 (பக்கம் 49)", type: "select", options: ["(7a + 5b)^2", "(7a - 5b)^2", "(7a + 5b)(7a - 5b)"], ans: "(7a + 5b)^2" },
+          { id: "m23q4", q: "x^2 + 15x + 36 ஐக் காரணிப்படுத்துக. (பக்கம் 49)", type: "select", options: ["(x + 12)(x + 3)", "(x + 9)(x + 4)", "(x + 6)(x + 6)"], ans: "(x + 12)(x + 3)" },
+          { id: "m23q5", q: "பொதுக்காரணியை வெளியே எடுத்துக் காரணிப்படுத்துக: 5l^3mn^2 - 35lm^2n + 15l^2mn (பக்கம் 49)", type: "select", options: ["5lmn(l^2n - 7m + 3l)", "5lm(ln - 7)", "5(l^3 - 7m)"], ans: "5lmn(l^2n - 7m + 3l)" }
+        ]
+      },
+      {
+        id: 24, category: "grade", title: "வ9. பிதாகரஸ் தேற்றம் & முக்கோணக் கோடுகள்",
+        desc: "செங்கோண முக்கோணத்தின் கர்ணம், பிதாகரஸ் தேற்றம் மற்றும் நடுக்கோட்டு மையம் (பக்கம் 52–53).",
+        passage: "குறிப்பு (பக்கம் 52): செங்கோண முக்கோணத்தில் கர்ணத்தின் வர்க்கமானது மற்ற இரு பக்கங்களின் வர்க்கங்களின் கூடுதலுக்குச் சமமாகும் (AC^2 = AB^2 + BC^2). 9 செ.மீ, 12 செ.மீ பக்கங்கள் கொண்ட செங்கோண முக்கோணத்தின் கர்ணம் 15 செ.மீ ஆகும்.",
+        questionPool: [
+          { id: "m24q1", q: "9 செ.மீ, 12 செ.மீ பக்க அளவுகள் கொண்ட ஒரு செங்கோண முக்கோணத்தின் கர்ணம் என்ன? (பக்கம் 52)", type: "select", options: ["15 செ.மீ", "21 செ.மீ", "10 செ.மீ"], ans: "15 செ.மீ" },
+          { id: "m24q2", q: "15 செ.மீ, 20 செ.மீ பக்க அளவுகள் கொண்ட ஒரு செங்கோண முக்கோணத்தின் கர்ணம் என்ன? (பக்கம் 58)", type: "select", options: ["25 செ.மீ", "35 செ.மீ", "30 செ.மீ"], ans: "25 செ.மீ" },
+          { id: "m24q3", q: "ஒரு முக்கோணத்தின் மூன்று நடுக்கோடுகளும் சந்திக்கும் புள்ளி அதன் என்ன எனப்படும்? (பக்கம் 53)", type: "select", options: ["நடுக்கோட்டு மையம் (Centroid)", "சுற்றுவட்ட மையம்", "செங்கோட்டு மையம்"], ans: "நடுக்கோட்டு மையம் (Centroid)" },
+          { id: "m24q4", q: "ஒரு முக்கோணத்தின் மூன்று செங்குத்துக்கோடுகளும் சந்திக்கும் புள்ளி என்ன? (பக்கம் 53)", type: "select", options: ["செங்கோட்டு மையம் (Orthocenter)", "உள்வட்டமையம்", "நடுக்கோட்டு மையம்"], ans: "செங்கோட்டு மையம் (Orthocenter)" },
+          { id: "m24q5", q: "ஒரு முக்கோணத்தின் சுற்றுவட்டமையம் எந்த எழுத்தால் குறிக்கப்படுகிறது? (பக்கம் 53)", type: "select", options: ["S", "G", "O", "I"], ans: "S" }
+        ]
+      },
+      {
+        id: 25, category: "grade", title: "வ10. அளவைகள் மற்றும் புள்ளியியல்",
+        desc: "நாற்கரம், சரிவகம், இணைகரம், சதுரம், சாய்சதுர பரப்பளவு மற்றும் புள்ளியியல் வீச்சு (பக்கம் 54–58).",
+        passage: "குறிப்பு (பக்கம் 54–58): இணைகரத்தின் பரப்பளவு = b x h. நாற்கரத்தின் பரப்பளவு = 1/2 x d x (h1 + h2). வீச்சு (Range) என்பது கொடுக்கப்பட்ட விவரங்களில் மிகப்பெரிய மற்றும் மிகச்சிறிய அளவுகளின் வித்தியாசம் ஆகும்.",
+        questionPool: [
+          { id: "m25q1", q: "ஒரு இணைகரத்தின் b = 15 செ.மீ மற்றும் h = 8 செ.மீ எனில், அதன் பரப்பளவு என்ன? (பக்கம் 58)", type: "select", options: ["120 ச.செ.மீ", "23 ச.செ.மீ", "7 ச.செ.மீ"], ans: "120 ச.செ.மீ" },
+          { id: "m25q2", q: "ஒரு நாற்கரத்தின் d = 12 செ.மீ, h1 = 8 செ.மீ மற்றும் h2 = 6 செ.மீ எனில், அதன் பரப்பளவு என்ன? (பக்கம் 58)", type: "select", options: ["84 ச.செ.மீ", "48 ச.செ.மீ", "72 ச.செ.மீ"], ans: "84 ச.செ.மீ" },
+          { id: "m25q3", q: "ஒரு சாய்சதுரத்தின் d1 = 8 செ.மீ மற்றும் d2 = 5 செ.மீ எனில், அதன் பரப்பளவு என்ன? (பக்கம் 58)", type: "select", options: ["20 ச.செ.மீ", "40 ச.செ.மீ", "13 ச.செ.மீ"], ans: "20 ச.செ.மீ" },
+          { id: "m25q4", q: "தரவுகள் 7, 9, 12, 14, 19 மற்றும் 22 எனில், வீச்சு (Range) காண்க. (பக்கம் 58)", type: "select", options: ["15", "22", "7"], ans: "15" },
+          { id: "m25q5", q: "தரவுகள் 3, 5, 15, 10, 20 மற்றும் 18 எனில், வீச்சு என்ன? (பக்கம் 57)", type: "select", options: ["17", "20", "3"], ans: "17" }
+        ]
+      }
+    ];
+
+    // ============================================================================
+    // செயல்திட்டம் மற்றும் மாணவர் தரவு மேலாண்மை (LocalStorage Engine)
+    // ============================================================================
+    const STORAGE_KEY_PROFILES = "thiran_maths_9_tm_profiles_v1";
+    const STORAGE_KEY_ACTIVE = "thiran_maths_9_tm_active_key_v1";
+
+    let allProfiles = {};
+    let currentProfileKey = null;
+    let currentModuleId = 1;
+    let activeQuestionSets = {};
+    let timerInterval = null;
+
+    function loadProfilesFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_PROFILES);
+        allProfiles = raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        allProfiles = {};
+      }
+    }
+
+    function saveProfilesToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_PROFILES, JSON.stringify(allProfiles));
+        if (currentProfileKey) {
+          localStorage.setItem(STORAGE_KEY_ACTIVE, currentProfileKey);
+        } else {
+          localStorage.removeItem(STORAGE_KEY_ACTIVE);
+        }
+      } catch (e) {
+        console.error("Storage save error:", e);
+      }
+    }
+
+    function makeProfileKey(roll, school) {
+      return `${roll.trim().toLowerCase()}__${school.trim().toLowerCase()}`;
+    }
+
+    function formatDateTa(isoStr) {
+      if (!isoStr) return "--";
+      const d = new Date(isoStr);
+      if (isNaN(d.getTime())) return isoStr;
+      return d.toLocaleDateString("ta-IN", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function formatDuration(totalSeconds) {
+      const sec = Math.max(0, Math.floor(totalSeconds || 0));
+      const hrs = Math.floor(sec / 3600);
+      const mins = Math.floor((sec % 3600) / 60);
+      const remSec = sec % 60;
+      if (hrs > 0) return `${hrs}மணி ${mins}நிமி ${remSec}விநாடி`;
+      return `${mins}நிமி ${remSec}விநாடி`;
+    }
+
+    // ============================================================================
+    // உள்நுழைவு மற்றும் பதிவு மேலாண்மை (Auth & Welcome Modal)
+    // ============================================================================
+    function switchAuthTab(mode) {
+      const loginForm = document.getElementById("login-form");
+      const regForm = document.getElementById("register-form");
+      const loginBtn = document.getElementById("tab-login-btn");
+      const regBtn = document.getElementById("tab-reg-btn");
+      const errBox = document.getElementById("auth-error");
+      errBox.style.display = "none";
+
+      if (mode === "login") {
+        loginForm.style.display = "block";
+        regForm.style.display = "none";
+        loginBtn.classList.add("active");
+        regBtn.classList.remove("active");
+        renderSavedProfilesList();
+      } else {
+        loginForm.style.display = "none";
+        regForm.style.display = "block";
+        loginBtn.classList.remove("active");
+        regBtn.classList.add("active");
+      }
+    }
+
+    function showAuthError(msg) {
+      const errBox = document.getElementById("auth-error");
+      errBox.textContent = msg;
+      errBox.style.display = "block";
+    }
+
+    function renderSavedProfilesList() {
+      const container = document.getElementById("saved-profiles-container");
+      const listEl = document.getElementById("saved-profiles-list");
+      const keys = Object.keys(allProfiles);
+
+      if (keys.length === 0) {
+        container.style.display = "none";
+        return;
+      }
+
+      container.style.display = "block";
+      listEl.innerHTML = "";
+
+      keys.forEach(key => {
+        const p = allProfiles[key];
+        const doneCount = Object.values(p.progress || {}).filter(m => m && m.completed).length;
+        const pill = document.createElement("div");
+        pill.className = "profile-pill";
+        pill.onclick = () => activateStudentSession(key);
+        pill.innerHTML = `
+          <div class="profile-pill-info">
+            <strong>${escapeHtml(p.name)}</strong> (${escapeHtml(p.studentClass)} - ${escapeHtml(p.section)})
+            <div style="font-size:0.76rem; color:#64748b;">Roll: ${escapeHtml(p.roll)} • ${escapeHtml(p.school)}</div>
+          </div>
+          <div class="profile-pill-meta">⭐ ${doneCount} / 25 அலகுகள் &rarr;</div>
+        `;
+        listEl.appendChild(pill);
+      });
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const roll = document.getElementById("login-roll").value.trim();
+      const school = document.getElementById("login-school").value.trim();
+      const key = makeProfileKey(roll, school);
+
+      if (!allProfiles[key]) {
+        showAuthError("இந்த வரிசை எண் மற்றும் பள்ளிப் பெயரில் கணக்கு ஏதும் கிடைக்கவில்லை. 'புதிய மாணவர் பதிவு' (New Student) தாவலைத் தேர்ந்தெடுத்துப் பதிவு செய்யவும்.");
+        return;
+      }
+      activateStudentSession(key);
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById("reg-name").value.trim();
+      const studentClass = document.getElementById("reg-class").value.trim();
+      const section = document.getElementById("reg-sec").value.trim();
+      const roll = document.getElementById("reg-roll").value.trim();
+      const school = document.getElementById("reg-school").value.trim();
+
+      if (!name || !roll || !school) {
+        showAuthError("அனைத்து விவரங்களையும் நிரப்பவும்.");
+        return;
+      }
+
+      const key = makeProfileKey(roll, school);
+      const nowIso = new Date().toISOString();
+
+      if (!allProfiles[key]) {
+        allProfiles[key] = {
+          name,
+          studentClass,
+          section,
+          roll,
+          school,
+          createdAt: nowIso,
+          lastActiveAt: nowIso,
+          timeSpentSeconds: 0,
+          lastModuleId: 1,
+          progress: {}
+        };
+      } else {
+        allProfiles[key].name = name;
+        allProfiles[key].studentClass = studentClass;
+        allProfiles[key].section = section;
+        allProfiles[key].lastActiveAt = nowIso;
+      }
+
+      saveProfilesToStorage();
+      activateStudentSession(key);
+    }
+
+    function activateStudentSession(key) {
+      currentProfileKey = key;
+      const profile = allProfiles[currentProfileKey];
+      profile.lastActiveAt = new Date().toISOString();
+      saveProfilesToStorage();
+
+      document.getElementById("welcome-screen").style.display = "none";
+      document.getElementById("header-student-info").innerHTML =
+        `👤 <strong>${escapeHtml(profile.name)}</strong> (${escapeHtml(profile.studentClass)} '${escapeHtml(profile.section)}' • Roll: ${escapeHtml(profile.roll)} • ${escapeHtml(profile.school)})`;
+
+      buildAllModulesDOM();
+      renderSidebarNav();
+      updateHeaderProgress();
+      startStudyTimer();
+
+      const resumeMod = profile.lastModuleId || 1;
+      openModule(resumeMod);
+    }
+
+    function logoutCurrentStudent() {
+      stopStudyTimer();
+      currentProfileKey = null;
+      localStorage.removeItem(STORAGE_KEY_ACTIVE);
+      renderSavedProfilesList();
+      document.getElementById("welcome-screen").style.display = "flex";
+    }
+
+    function resetCurrentStudent() {
+      if (!currentProfileKey || !allProfiles[currentProfileKey]) return;
+      const confirmReset = confirm("உங்கள் அனைத்து 25 அலகுகளின் பயிற்சி மதிப்பெண்களையும் அழித்து முதலில் இருந்து தொடங்க விரும்புகிறீர்களா?");
+      if (!confirmReset) return;
+
+      const p = allProfiles[currentProfileKey];
+      p.progress = {};
+      p.timeSpentSeconds = 0;
+      p.createdAt = new Date().toISOString();
+      p.lastActiveAt = new Date().toISOString();
+      p.lastModuleId = 1;
+      activeQuestionSets = {};
+      saveProfilesToStorage();
+
+      buildAllModulesDOM();
+      renderSidebarNav();
+      updateHeaderProgress();
+      openModule(1);
+    }
+
+    // ============================================================================
+    // நேரக் கணக்கீடு மற்றும் முன்னேற்றப் பட்டை (Timer & Progress)
+    // ============================================================================
+    function startStudyTimer() {
+      stopStudyTimer();
+      timerInterval = setInterval(() => {
+        if (!currentProfileKey || !allProfiles[currentProfileKey]) return;
+        const p = allProfiles[currentProfileKey];
+        p.timeSpentSeconds = (p.timeSpentSeconds || 0) + 1;
+        p.lastActiveAt = new Date().toISOString();
+        document.getElementById("hdr-timer").textContent = formatDuration(p.timeSpentSeconds);
+        if (p.timeSpentSeconds % 5 === 0) {
+          saveProfilesToStorage();
+        }
+      }, 1000);
+    }
+
+    function stopStudyTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function updateHeaderProgress() {
+      if (!currentProfileKey || !allProfiles[currentProfileKey]) return;
+      const p = allProfiles[currentProfileKey];
+      const prog = p.progress || {};
+      let completedCount = 0;
+
+      MODULES_DATA.forEach(m => {
+        if (prog[m.id] && prog[m.id].completed) completedCount++;
+      });
+
+      const pct = Math.round((completedCount / MODULES_DATA.length) * 100);
+      document.getElementById("hdr-modules").textContent = `${completedCount} / ${MODULES_DATA.length}`;
+      document.getElementById("hdr-timer").textContent = formatDuration(p.timeSpentSeconds || 0);
+      document.getElementById("hdr-percent").textContent = `${pct}%`;
+      document.getElementById("hdr-bar").style.width = `${pct}%`;
+    }
+
+    // ============================================================================
+    // பக்கப் பட்டியல் மற்றும் வினாக்கள் இயக்கம் (Sidebar & Modules)
+    // ============================================================================
+    function renderSidebarNav() {
+      const fundContainer = document.getElementById("nav-list-fundamental");
+      const gradeContainer = document.getElementById("nav-list-grade");
+      fundContainer.innerHTML = "";
+      gradeContainer.innerHTML = "";
+
+      const prog = (currentProfileKey && allProfiles[currentProfileKey]?.progress) || {};
+
+      MODULES_DATA.forEach(mod => {
+        const isDone = prog[mod.id] && prog[mod.id].completed;
+        const btn = document.createElement("button");
+        btn.className = "nav-btn" + (currentModuleId === mod.id ? " active" : "");
+        btn.id = `nav-btn-${mod.id}`;
+        btn.onclick = () => openModule(mod.id);
+        btn.innerHTML = `
+          <span>${escapeHtml(mod.title)}</span>
+          <span class="star ${isDone ? "earned" : ""}" id="nav-star-${mod.id}">★</span>
+        `;
+        if (mod.category === "fundamental") {
+          fundContainer.appendChild(btn);
+        } else {
+          gradeContainer.appendChild(btn);
+        }
+      });
+    }
+
+    function pickQuestionsForModule(mod, shuffle = false) {
+      const pool = [...mod.questionPool];
+      if (shuffle) {
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+      }
+      const count = Math.min(QUESTIONS_PER_MODULE, pool.length);
+      return pool.slice(0, count);
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildAllModulesDOM() {
+      const container = document.getElementById("modules-container");
+      container.innerHTML = "";
+
+      MODULES_DATA.forEach(mod => {
+        if (!activeQuestionSets[mod.id]) {
+          activeQuestionSets[mod.id] = pickQuestionsForModule(mod, false);
+        }
+        const card = document.createElement("div");
+        card.className = "module-card";
+        card.id = `mod-card-${mod.id}`;
+        container.appendChild(card);
+        renderSingleModuleCard(mod.id);
+      });
+    }
+
+    function renderSingleModuleCard(modId) {
+      const mod = MODULES_DATA.find(m => m.id === modId);
+      const card = document.getElementById(`mod-card-${modId}`);
+      if (!mod || !card) return;
+
+      const questions = activeQuestionSets[modId] || pickQuestionsForModule(mod, false);
+      const prog = (currentProfileKey && allProfiles[currentProfileKey]?.progress?.[modId]) || null;
+
+      const badgeHtml = mod.category === "grade"
+        ? `<span class="grade-tag">பகுதி 2: வகுப்புநிலைப் பாடப்பொருள்</span>`
+        : `<span class="set-badge">பகுதி 1: அடிப்படைக் கருத்துகள்</span>`;
+
+      const statusBadge = prog && prog.completed
+        ? `<span class="badge-done">✅ நிறைவு பெற்றது (${prog.score}/${prog.total} • ${prog.date})</span>`
+        : `<span class="badge-pending">⏳ பயிற்சி நிலுவையில் உள்ளது</span>`;
+
+      let passageHtml = "";
+      if (mod.passage) {
+        passageHtml = `<div class="passage"><strong>📖 குறிப்பு / விளக்கம்:</strong><br>${escapeHtml(mod.passage).replace(/\n/g, "<br>")}</div>`;
+      }
+
+      let qListHtml = "";
+      questions.forEach((item, idx) => {
+        const shuffledOpts = shuffleArray(item.options);
+        const optionsHtml = shuffledOpts
+          .map(opt => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`)
+          .join("");
+
+        qListHtml += `
+          <div class="question-block">
+            <label class="question-title" for="input-${mod.id}-${item.id}">
+              ${idx + 1}. ${escapeHtml(item.q)}
+            </label>
+            <select class="q-input" id="input-${mod.id}-${item.id}">
+              <option value="">-- சரியான விடையைத் தேர்ந்தெடுக்கவும் --</option>
+              ${optionsHtml}
+            </select>
+          </div>
+        `;
+      });
+
+      const nextModId = mod.id < MODULES_DATA.length ? mod.id + 1 : null;
+      const nextBtnHtml = nextModId
+        ? `<button type="button" class="btn-secondary" onclick="openModule(${nextModId})">அடுத்த அலகு (${nextModId}) &rarr;</button>`
+        : `<button type="button" class="btn-secondary" onclick="showCertificate()">🎓 சான்றிதழைப் பார்க்க &rarr;</button>`;
+
+      card.innerHTML = `
+        <div class="mod-header-row">
+          <h2>${escapeHtml(mod.title)}</h2>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            ${badgeHtml}
+            ${statusBadge}
+          </div>
+        </div>
+        <p style="color:var(--muted); margin-top:0; margin-bottom:14px; font-size:0.9rem;">${escapeHtml(mod.desc)}</p>
+        ${passageHtml}
+        <div id="q-wrap-${mod.id}">
+          ${qListHtml}
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px;">
+          <button type="button" class="btn-check" onclick="checkModuleAnswers(${mod.id})">✔️ விடைகளைச் சரிபார்க்க (Check Answers)</button>
+          <button type="button" class="btn-shuffle" onclick="shuffleModuleQuestions(${mod.id})">🔀 வேறு வினாக்கள் (Shuffle Set)</button>
+          ${nextBtnHtml}
+        </div>
+        <div class="feedback" id="feedback-${mod.id}"></div>
+      `;
+    }
+
+    function openModule(modId) {
+      currentModuleId = modId;
+      if (currentProfileKey && allProfiles[currentProfileKey]) {
+        allProfiles[currentProfileKey].lastModuleId = modId;
+        saveProfilesToStorage();
+      }
+
+      document.querySelectorAll("#modules-container .module-card").forEach(el => el.classList.remove("active"));
+      document.getElementById("cert-view").classList.remove("active");
+
+      const targetCard = document.getElementById(`mod-card-${modId}`);
+      if (targetCard) targetCard.classList.add("active");
+
+      document.querySelectorAll(".sidebar .nav-btn").forEach(btn => btn.classList.remove("active"));
+      const activeNavBtn = document.getElementById(`nav-btn-${modId}`);
+      if (activeNavBtn) activeNavBtn.classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function shuffleModuleQuestions(modId) {
+      const mod = MODULES_DATA.find(m => m.id === modId);
+      if (!mod) return;
+      activeQuestionSets[modId] = pickQuestionsForModule(mod, true);
+      renderSingleModuleCard(modId);
+    }
+
+    function checkModuleAnswers(modId) {
+      const mod = MODULES_DATA.find(m => m.id === modId);
+      if (!mod) return;
+      const questions = activeQuestionSets[modId] || [];
+      let correctCount = 0;
+      let unansweredCount = 0;
+
+      questions.forEach(item => {
+        const inputEl = document.getElementById(`input-${mod.id}-${item.id}`);
+        if (!inputEl) return;
+        const val = inputEl.value.trim();
+        inputEl.classList.remove("correct-input", "wrong-input");
+
+        if (!val) {
+          unansweredCount++;
+          inputEl.classList.add("wrong-input");
+        } else if (val === item.ans) {
+          correctCount++;
+          inputEl.classList.add("correct-input");
+        } else {
+          inputEl.classList.add("wrong-input");
+        }
+      });
+
+      const fb = document.getElementById(`feedback-${mod.id}`);
+      fb.style.display = "block";
+
+      if (unansweredCount > 0) {
+        fb.style.background = "var(--warning-bg)";
+        fb.style.color = "var(--warning)";
+        fb.textContent = `⚠️ தயவுசெய்து அனைத்து ${questions.length} வினாக்களுக்கும் விடையைத் தேர்ந்தெடுக்கவும்! (தற்போதைய மதிப்பெண்: ${correctCount}/${questions.length})`;
+        return;
+      }
+
+      const todayStr = formatDateTa(new Date().toISOString());
+
+      if (correctCount === questions.length) {
+        fb.style.background = "var(--success-bg)";
+        fb.style.color = "var(--success)";
+        fb.innerHTML = `🎉 மிகச் சிறப்பு! ${correctCount} / ${questions.length} வினாக்களுக்கும் சரியான விடையளித்து இத்திறனில் நட்சத்திரம் (★) பெற்றுள்ளீர்கள்!`;
+
+        if (currentProfileKey && allProfiles[currentProfileKey]) {
+          const p = allProfiles[currentProfileKey];
+          if (!p.progress) p.progress = {};
+          p.progress[mod.id] = {
+            completed: true,
+            score: correctCount,
+            total: questions.length,
+            date: todayStr
+          };
+          p.lastActiveAt = new Date().toISOString();
+          saveProfilesToStorage();
+        }
+
+        const starEl = document.getElementById(`nav-star-${mod.id}`);
+        if (starEl) starEl.classList.add("earned");
+        updateHeaderProgress();
+      } else {
+        fb.style.background = "var(--danger-bg)";
+        fb.style.color = "var(--danger)";
+        fb.innerHTML = `💡 நீங்கள் ${correctCount} / ${questions.length} சரியாக எழுதியுள்ளீர்கள். சிவப்பு நிறத்தில் உள்ள வினாக்களைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்! (100% சரியாக எழுதினால் நட்சத்திரம் கிடைக்கும்)`;
+
+        if (currentProfileKey && allProfiles[currentProfileKey]) {
+          const p = allProfiles[currentProfileKey];
+          if (!p.progress) p.progress = {};
+          if (!p.progress[mod.id]?.completed) {
+            p.progress[mod.id] = {
+              completed: false,
+              score: correctCount,
+              total: questions.length,
+              date: todayStr
+            };
+            saveProfilesToStorage();
+          }
+        }
+      }
+    }
+
+    // ============================================================================
+    // சான்றிதழ் மற்றும் பணிப் பதிவேடு (Certificate & Work Log)
+    // ============================================================================
+    function showCertificate() {
+      document.querySelectorAll("#modules-container .module-card").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".sidebar .nav-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("btn-cert-nav").classList.add("active");
+
+      const certView = document.getElementById("cert-view");
+      certView.classList.add("active");
+
+      if (!currentProfileKey || !allProfiles[currentProfileKey]) return;
+      const p = allProfiles[currentProfileKey];
+      const prog = p.progress || {};
+
+      let completedCount = 0;
+      MODULES_DATA.forEach(m => {
+        if (prog[m.id] && prog[m.id].completed) completedCount++;
+      });
+      const pct = Math.round((completedCount / MODULES_DATA.length) * 100);
+
+      document.getElementById("cert-name").textContent = p.name;
+      document.getElementById("cert-meta").innerHTML =
+        `வகுப்பு: <strong>${escapeHtml(p.studentClass)} - '${escapeHtml(p.section)}'</strong> • வரிசை எண்: <strong>${escapeHtml(p.roll)}</strong><br>பள்ளி: <strong>${escapeHtml(p.school)}</strong>`;
+
+      document.getElementById("cert-mastery").textContent = `${pct}%`;
+      document.getElementById("cert-duration").textContent = formatDuration(p.timeSpentSeconds || 0);
+      document.getElementById("cert-mod-count").textContent = `${completedCount} / ${MODULES_DATA.length}`;
+      document.getElementById("cert-span-dates").textContent =
+        `தொடங்கிய நாள்: ${formatDateTa(p.createdAt)} | கடைசியாகப் பயிற்சி செய்தது: ${formatDateTa(p.lastActiveAt)}`;
+
+      const congratsEl = document.getElementById("cert-congrats");
+      if (completedCount === MODULES_DATA.length) {
+        congratsEl.innerHTML =
+          `🌟 <strong>மனமார்ந்த பாராட்டுகள்!</strong> திறன் (THIRAN) வகுப்பு 9 கணிதம் பயிற்சி நூலின் அனைத்து 25 அலகுகளையும் வெற்றிகரமாக நிறைவு செய்து 100% முழுத் தேர்ச்சி பெற்றுள்ளீர்கள்!`;
+      } else {
+        congratsEl.innerHTML =
+          `👏 இதுவரை <strong>${completedCount} / 25</strong> அலகுகளை நிறைவு செய்துள்ளீர்கள் (${pct}% தேர்ச்சி). தொடர்ந்து பயிற்சி செய்து அனைத்து 25 நட்சத்திரங்களையும் வெல்ல வாழ்த்துகள்!`;
+      }
+
+      const leftTbody = document.getElementById("log-table-left");
+      const rightTbody = document.getElementById("log-table-right");
+      leftTbody.innerHTML = "";
+      rightTbody.innerHTML = "";
+
+      MODULES_DATA.forEach(mod => {
+        const mProg = prog[mod.id];
+        const isDone = mProg && mProg.completed;
+        const statusHtml = isDone
+          ? `<span class="badge-done">★ நிறைவு</span>`
+          : `<span class="badge-pending">நிலுவை</span>`;
+        const scoreText = mProg ? `${mProg.score}/${mProg.total}` : `0/${QUESTIONS_PER_MODULE}`;
+        const dateText = mProg?.date || "--";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${escapeHtml(mod.title)}</strong></td>
+          <td>${statusHtml}</td>
+          <td style="font-weight:700;">${scoreText}</td>
+          <td>${dateText}</td>
+        `;
+
+        if (mod.category === "fundamental") {
+          leftTbody.appendChild(tr);
+        } else {
+          rightTbody.appendChild(tr);
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ============================================================================
+    // A4 PNG சான்றிதழ் ஏற்றுமதி (A4 Portrait Canvas Generator)
+    // ============================================================================
+    function downloadA4PortraitSheet() {
+      if (!currentProfileKey || !allProfiles[currentProfileKey]) return;
+      const p = allProfiles[currentProfileKey];
+      const prog = p.progress || {};
+
+      let completedCount = 0;
+      MODULES_DATA.forEach(m => {
+        if (prog[m.id] && prog[m.id].completed) completedCount++;
+      });
+      const pct = Math.round((completedCount / MODULES_DATA.length) * 100);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1240;
+      canvas.height = 1754; // A4 Portrait @ 150 DPI
+      const ctx = canvas.getContext("2d");
+
+      // வெள்ளைப் பின்னணி
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // சான்றிதழ் அட்டை
+      const cx = 45, cy = 40, cw = 1150, ch = 640;
+      const grad = ctx.createRadialGradient(cx + cw / 2, cy + ch / 2, 50, cx + cw / 2, cy + ch / 2, 650);
+      grad.addColorStop(0, "#1e3a8a");
+      grad.addColorStop(0.6, "#0f2557");
+      grad.addColorStop(1, "#071330");
+      ctx.fillStyle = grad;
+      ctx.fillRect(cx, cy, cw, ch);
+
+      // தங்க நிற விளிம்புகள்
+      ctx.strokeStyle = "#d4af37";
+      ctx.lineWidth = 8;
+      ctx.strokeRect(cx, cy, cw, ch);
+      ctx.strokeStyle = "#fef08a";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx + 14, cy + 14, cw - 28, ch - 28);
+
+      ctx.textAlign = "center";
+
+      // தலைப்பு
+      ctx.fillStyle = "#fde047";
+      ctx.font = "bold 20px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText("🏆 பள்ளிக் கல்வித்துறை • தமிழ்நாடு அரசு (THIRAN - வகுப்பு 9 கணிதம்) 🏆", cx + cw / 2, cy + 58);
+
+      // முதன்மைத் தலைப்பு
+      ctx.fillStyle = "#fffbeb";
+      ctx.font = "900 38px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText("தேர்ச்சி மற்றும் நிறைவுச் சான்றிதழ்", cx + cw / 2, cy + 112);
+
+      ctx.fillStyle = "#fde68a";
+      ctx.font = "18px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText("இச்சான்றிதழ் பெருமையுடன் வழங்கப்படுவது", cx + cw / 2, cy + 150);
+
+      // மாணவர் பெயர்
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 40px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText(p.name, cx + cw / 2, cy + 205);
+
+      ctx.strokeStyle = "#eab308";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cx + 320, cy + 220);
+      ctx.lineTo(cx + cw - 320, cy + 220);
+      ctx.stroke();
+
+      // மாணவர் விவரங்கள்
+      ctx.fillStyle = "#fef9c3";
+      ctx.font = "bold 21px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText(
+        `வகுப்பு: ${p.studentClass} - '${p.section}'  •  வரிசை எண்: ${p.roll}  •  பள்ளி: ${p.school}`,
+        cx + cw / 2,
+        cy + 262
+      );
+
+      // வாழ்த்துப் பட்டை
+      ctx.fillStyle = "rgba(250, 204, 21, 0.16)";
+      ctx.fillRect(cx + 80, cy + 290, cw - 160, 64);
+      ctx.strokeStyle = "#eab308";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx + 80, cy + 290, cw - 160, 64);
+
+      ctx.fillStyle = "#fef08a";
+      ctx.font = "bold 18px 'Segoe UI', 'Nirmala UI', sans-serif";
+      const bannerMsg = completedCount === MODULES_DATA.length
+        ? "🌟 பாராட்டுகள்! அனைத்து 25 கணித அலகுகளையும் வெற்றிகரமாக நிறைவு செய்து 100% தேர்ச்சி பெற்றுள்ளீர்கள்!"
+        : `👏 இதுவரை ${completedCount} / 25 அலகுகளை நிறைவு செய்து ${pct}% தேர்ச்சி பெற்றுள்ளீர்கள்!`;
+      ctx.fillText(bannerMsg, cx + cw / 2, cy + 329);
+
+      // புள்ளிவிவரக் கட்டங்கள்
+      const stats = [
+        { label: "மொத்தத் தேர்ச்சி சதவீதம்", val: `${pct}%` },
+        { label: "எடுத்துக்கொண்ட கற்றல் நேரம்", val: formatDuration(p.timeSpentSeconds || 0) },
+        { label: "நிறைவு செய்த அலகுகள்", val: `${completedCount} / 25` }
+      ];
+      const boxW = 290, boxH = 105, gap = 40;
+      const startX = cx + (cw - (boxW * 3 + gap * 2)) / 2;
+      const boxY = cy + 385;
+
+      stats.forEach((st, idx) => {
+        const bx = startX + idx * (boxW + gap);
+        ctx.fillStyle = "#071330";
+        ctx.fillRect(bx, boxY, boxW, boxH);
+        ctx.strokeStyle = "#eab308";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(bx, boxY, boxW, boxH);
+
+        ctx.fillStyle = "#fde68a";
+        ctx.font = "bold 15px 'Segoe UI', 'Nirmala UI', sans-serif";
+        ctx.fillText(st.label, bx + boxW / 2, boxY + 36);
+
+        ctx.fillStyle = "#facc15";
+        ctx.font = "900 30px 'Segoe UI', 'Nirmala UI', sans-serif";
+        ctx.fillText(st.val, bx + boxW / 2, boxY + 80);
+      });
+
+      // தேதிகள் மற்றும் வடிவமைப்புச் சான்று
+      ctx.fillStyle = "#fde68a";
+      ctx.font = "16px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText(
+        `தொடங்கிய நாள்: ${formatDateTa(p.createdAt)}   |   கடைசியாகப் பயிற்சி செய்தது: ${formatDateTa(p.lastActiveAt)}`,
+        cx + cw / 2,
+        cy + 545
+      );
+
+      ctx.fillStyle = "#facc15";
+      ctx.font = "bold 18px 'Segoe UI', sans-serif";
+      ctx.fillText("✦ DESIGNED BY THIRAVIYA KUMAR G ✦", cx + cw / 2, cy + 600);
+
+      // பணிப் பதிவேட்டு அட்டவணை
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#0f2557";
+      ctx.font = "bold 22px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText("📅 தினசரிப் பணிப் பதிவேடு (என்னால் முடியும்... நானே செய்வேன்... - 25 அலகுகள்)", 45, 725);
+
+      const fundMods = MODULES_DATA.filter(m => m.category === "fundamental");
+      const gradeMods = MODULES_DATA.filter(m => m.category === "grade");
+
+      drawLogTableColumn(ctx, 45, 745, 560, "பகுதி 1: அடிப்படைக் கருத்துகள் (1–15)", fundMods, prog);
+      drawLogTableColumn(ctx, 635, 745, 560, "பகுதி 2: வகுப்புநிலைப் பாடப்பொருள் (16–25)", gradeMods, prog);
+
+      // அடிக்குறிப்பு
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#475569";
+      ctx.font = "bold 16px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText("திறன் (THIRAN) வகுப்பு 9 - கணிதம் (தமிழ் வழி) • Designed by Thiraviya Kumar G", canvas.width / 2, 1715);
+
+      const link = document.createElement("a");
+      const safeName = (p.name || "Student").replace(/[^a-zA-Z0-9\u0B80-\u0BFF]/g, "_");
+      link.download = `THIRAN_Maths_9_TM_Certificate_${safeName}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    function drawLogTableColumn(ctx, x, y, w, titleHeader, mods, prog) {
+      const rowH = 54;
+      ctx.fillStyle = "#0f2557";
+      ctx.fillRect(x, y, w, rowH);
+
+      ctx.fillStyle = "#fde047";
+      ctx.font = "bold 15px 'Segoe UI', 'Nirmala UI', sans-serif";
+      ctx.fillText(titleHeader, x + 10, y + 33);
+      ctx.fillText("நிலை", x + 310, y + 33);
+      ctx.fillText("மதிப்பெண்", x + 395, y + 33);
+      ctx.fillText("நாள்", x + 485, y + 33);
+
+      mods.forEach((m, idx) => {
+        const ry = y + (idx + 1) * rowH;
+        ctx.fillStyle = idx % 2 === 0 ? "#f8fafc" : "#ffffff";
+        ctx.fillRect(x, ry, w, rowH);
+
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, ry, w, rowH);
+
+        const mp = prog[m.id];
+        const isDone = mp && mp.completed;
+
+        ctx.fillStyle = "#1e293b";
+        ctx.font = "bold 14px 'Segoe UI', 'Nirmala UI', sans-serif";
+        ctx.fillText(m.title.substring(0, 28), x + 10, ry + 32);
+
+        ctx.fillStyle = isDone ? "#16a34a" : "#64748b";
+        ctx.font = "bold 14px 'Segoe UI', 'Nirmala UI', sans-serif";
+        ctx.fillText(isDone ? "★ நிறைவு" : "நிலுவை", x + 310, ry + 32);
+
+        ctx.fillStyle = "#0f2557";
+        ctx.fillText(mp ? `${mp.score}/${mp.total}` : `0/${QUESTIONS_PER_MODULE}`, x + 410, ry + 32);
+
+        ctx.fillStyle = "#475569";
+        ctx.font = "13px 'Segoe UI', 'Nirmala UI', sans-serif";
+        ctx.fillText(mp?.date || "--", x + 475, ry + 32);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // ============================================================================
+    // தொடக்கம் (Initialization)
+    // ============================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      loadProfilesFromStorage();
+      renderSavedProfilesList();
+
+      const activeKey = localStorage.getItem(STORAGE_KEY_ACTIVE);
+      if (activeKey && allProfiles[activeKey]) {
+        activateStudentSession(activeKey);
+      }
+    });
+  </script>
+</body>
+</html>
